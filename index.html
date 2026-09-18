@@ -10,11 +10,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body class="is-onboarding">
   <main class="app-shell">
     <header class="topbar">
       <div class="brand"><span class="brand-mark">↗</span><span>ФОРМА</span></div>
-      <button class="icon-button" id="openProfile" aria-label="Открыть профиль">Мой профиль <span id="avatar">А</span></button>
+      <button class="icon-button" id="openProfile" aria-label="Открыть профиль">Мой профиль <span id="avatar">Я</span></button>
     </header>
 
 
@@ -62,7 +62,7 @@
         <span class="count" id="exerciseCount">6 упражнений</span>
       </section>
 
-      <section class="rest-timer"><div><p class="eyebrow">МЕЖДУ ПОДХОДАМИ</p><strong id="timerValue">01:30</strong></div><button id="timerStart">Начать отдых</button><button id="timerReset" aria-label="Сбросить таймер">Сброс</button></section><section class="exercise-list" id="exerciseList"></section>
+      <p class="logging-help">Галочка — упражнение выполнено. «Записать подход» — сохранить вес и повторы в журнал. Запись необязательна.</p><p class="equipment-help">На фото — пример нужного оборудования. Модель в твоём зале может отличаться.</p><section class="rest-timer"><div><p class="eyebrow">МЕЖДУ ПОДХОДАМИ</p><strong id="timerValue">01:30</strong></div><button id="timerStart">Начать отдых</button><button id="timerReset" aria-label="Сбросить таймер">Сброс</button></section><section class="exercise-list" id="exerciseList"></section>
 
       <section class="tip-card">
         <div class="tip-icon">✦</div>
@@ -81,12 +81,12 @@
       <section class="tracker-block">
         <div class="tracker-header">
           <div>
-            <p class="eyebrow">ТРИКЕР</p>
-            <h3>Каждый подход имеет значение</h3><p class="page-copy">Записывай нагрузку и следи за своими результатами.</p><div class="tracker-summary" id="trackerSummary"></div>
+            <p class="eyebrow">ЖУРНАЛ ТРЕНИРОВОК</p>
+            <h3>Твои результаты</h3><p class="page-copy">Подходы из плана автоматически появляются здесь. Это история результатов, а не ещё один список заданий.</p><div class="tracker-summary" id="trackerSummary"></div>
           </div>
         </div>
 
-        <div class="tracker-form">
+        <details class="manual-entry"><summary>Добавить подход вручную</summary><div class="tracker-form">
           <label>
             Упражнение
             <select id="trackerExercise">
@@ -101,17 +101,17 @@
           <div class="tracker-inline">
             <label>
               Вес
-              <input id="trackerWeight" type="number" min="0" step="1" placeholder="30" />
+              <input id="trackerWeight" type="number" min="0" max="1000" step="0.1" placeholder="30" />
             </label>
             <label>
               Повторы
-              <input id="trackerReps" type="number" min="1" step="1" placeholder="10" />
+              <input id="trackerReps" type="number" min="1" max="100" step="1" placeholder="10" />
             </label>
           </div>
           <button id="saveTracker" class="save-button">Сохранить</button>
         </div>
 
-        <div class="tracker-table-wrap">
+        </details><div class="tracker-table-wrap">
           <table class="tracker-table">
             <thead>
               <tr>
@@ -119,7 +119,7 @@
                 <th>Упражнение</th>
                 <th>Вес</th>
                 <th>Повторы</th>
-                <th>След. вес</th>
+                <th>День</th>
               </tr>
             </thead>
             <tbody id="trackerTable"></tbody>
@@ -130,11 +130,11 @@
 
     <div class="tab-view" data-tab="profile">
       <section class="profile-block" aria-labelledby="profileTitle">
-        <header class="profile-heading"><p class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</p><h1 id="profileTitle">Твой профиль</h1><p class="page-copy">Расскажи о себе. Подстроим твою программу под твой ритм.</p></header>
-        <div class="profile-overview"><div class="profile-avatar" id="profileAvatar" aria-hidden="true">А</div><div class="profile-identity"><h2 id="profileName">Артём</h2><p id="profileGoal">Сила и мышцы</p></div><span class="local-badge">Хранится на устройстве</span></div>
+        <div class="onboarding-message"><span>ДОБРО ПОЖАЛОВАТЬ В ФОРМУ</span><p>Один раз заполни профиль — дальше сразу откроется твоя тренировка.</p></div><header class="profile-heading"><p class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</p><h1 id="profileTitle">Твой профиль</h1><p class="page-copy">Расскажи о себе. Подстроим твою программу под твой ритм.</p></header>
+        <div class="profile-overview"><div class="profile-avatar" id="profileAvatar" aria-hidden="true">Я</div><div class="profile-identity"><h2 id="profileName">Твой профиль</h2><p id="profileGoal">Сила и мышцы</p></div><span class="local-badge">Хранится на устройстве</span></div>
     <section class="stats-grid" aria-label="Профиль пользователя">
-      <div class="stat"><span>ВОЗРАСТ</span><strong id="statAge">26 <small>лет</small></strong></div>
-      <div class="stat"><span>ВЕС</span><strong id="statWeight">55–58 <small>кг</small></strong></div>
+      <div class="stat"><span>ВОЗРАСТ</span><strong id="statAge">—</strong></div>
+      <div class="stat"><span>ВЕС</span><strong id="statWeight">—</strong></div>
       <div class="stat"><span>УРОВЕНЬ</span><strong id="statLevel">NORM</strong></div>
     </section>
         <form id="profileForm" class="profile-form">
@@ -155,7 +155,7 @@
             <label class="profile-field"><span>Как ты себя чувствуешь</span><select name="readiness"><option value="good">Полон сил — готов тренироваться</option><option value="normal">Обычное самочувствие</option><option value="tired">Устал — нужна лёгкая тренировка</option></select></label>
             <p class="profile-help">Цель, опыт, время и самочувствие меняют подходы и повторы. Рабочую нагрузку подбираем по твоим записям.</p>
           </section>
-          <footer class="profile-actions"><div><strong id="profileSaveStatus" role="status" aria-live="polite">Все изменения сохранены</strong><p>Твой план обновится после сохранения</p></div><div class="profile-action-buttons"><button type="reset" class="discard-button">Отменить</button><button type="submit" class="save-button">Сохранить изменения</button></div></footer>
+          <footer class="profile-actions"><div><strong id="profileSaveStatus" role="status" aria-live="polite">Все изменения сохранены</strong><p>Твой план обновится после сохранения</p></div><div class="profile-action-buttons"><button type="reset" class="discard-button">Отменить</button><button id="profileSaveButton" type="submit" class="save-button">Сохранить изменения</button></div></footer>
         </form>
       </section>
     </div>
@@ -163,10 +163,11 @@
 
   <nav class="bottom-nav" aria-label="Основная навигация">
     <button class="nav-item active" data-target="plan"><span>▦</span>План</button>
-    <button class="nav-item" data-target="tracker"><span>◷</span>Прогресс</button>
+    <button class="nav-item" data-target="tracker"><span>◷</span>Журнал</button>
     <button class="nav-item" data-target="profile"><span>◎</span>Профиль</button>
   </nav>
 
+  <dialog id="equipmentDialog" class="equipment-dialog" aria-labelledby="equipmentDialogTitle"><button id="closeEquipmentDialog" type="button">Закрыть</button><h2 id="equipmentDialogTitle">Фото оборудования</h2><img id="equipmentDialogImage" alt=""><p>Пример оборудования. Модель в твоём зале может отличаться.</p></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
 </body>
 </html>

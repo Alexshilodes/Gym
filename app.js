@@ -6,13 +6,13 @@
 };
 
 const defaultProfile = {
-  name: 'Артём',
-  age: 26,
-  sex: 'male',
-  height: 178,
-  weight: 56,
+  name: '',
+  age: '',
+  sex: '',
+  height: '',
+  weight: '',
   goal: 'strength',
-  level: 'intermediate',
+  level: 'beginner',
   difficulty: 'normal',
   sessionMinutes: 60,
   readiness: 'normal'
@@ -23,55 +23,55 @@ const baseWorkoutData = {
     title: 'Тренировка A — грудь, плечи, трицепс',
     duration: '45–60 мин',
     exercises: [
-      { name: 'Chest Press — жим от груди в тренажёре', sets: '3 × 8–12', note: 'Сиденье выставляй так, чтобы рукоятки были примерно на уровне середины груди. Не бросай вес назад.', image: 'https://images.openai.com/static-rsc-4/ONOgQwaS70d4Z-Gs6U2C3wXVimTZiHT2Lt-gy-xIjxrAFUn8JcRVOFtjfI0TfnmcGYhlVZrhQW7VmhE0AGMLobtbCjERZ1UWSIT_8_lwBID9s7e4lgPypNr2YLNatOAjFJ6hNcHjC14y_ExmVzUPP1HAy7ivLJKRJyQHWmz0blM?purpose=inline' },
-      { name: 'Incline Dumbbell Press — жим гантелей на наклонной', sets: '3 × 8–12', note: 'Скамья примерно 30°. Это будет одним из основных упражнений для верхней части груди.', image: 'https://images.openai.com/static-rsc-4/x43FdibMUv69GMd2rc-hQoT9nEqLCvmovbl-7BPqDsYpD3Xaq_aJl5bo4AEX2XN90BIAY47z7xYBIvKC3PCsSrnTOZ75cWne5sO7jHUTfqtktfk_dHrQv8QPyZMAprzP0dWWc4WzenB5_o72bojGuwdNgWkTwG3Dw6jkFXeThf0?purpose=inline' },
-      { name: 'Pec Deck — «бабочка»', sets: '3 × 10–15', note: 'Главное — сводить руки грудью, а не просто толкать их плечами.', image: 'https://images.openai.com/static-rsc-4/LDvCgenJOJ9s4DXyBCb_37Dm168TR4m7e0a41DIIUCmYphBFknlg0xjoD7aeIz8I8-wxxa9Rvwm6H5PTVW_JtMXEshKS8YsAGBs00NEsCKCxRVD5ko-By7ut7CZ7xfjOXxkbynMGJCMe8b5vteM0tnVzSqAgcPObaBH31kWY82Ip2biJxYMfKQ5kBN9r6vvy?purpose=inline' },
-      { name: 'Lateral Raise Machine — разведение на среднюю дельту', sets: '3 × 10–15', note: 'Это упражнение я специально добавляю для визуальной ширины плеч.', image: 'https://images.openai.com/static-rsc-4/TbtvE3-ok5zdEcJsdT6AF9HO2jSj7CdkASYd5MrsKjDrBsoAABawiI-Y5sv624inCoBhRlz59N0gRBNTSn2fnVoin4NXKhbBYzNaXfNlEn9ktwA6cEwujqjqRLVUG1uDYbz-ivgdn9-vvIjX8rC_8QWARNma-lrSdsRhKa6ibTM?purpose=inline' },
-      { name: 'Triceps Pushdown — разгибание рук на верхнем блоке', sets: '3 × 10–15', note: 'Локти стараемся держать примерно на одном месте.', image: 'https://images.openai.com/static-rsc-4/yY8gmfuljUHJdjCfcsp5CnvCOxfPgD8SsyerD2D0NwcAxc4gjYiXWcM8g5thkugwueTpv88YzRd_qpJz7f4jbzjfxrBdknpR21-90Zbx8pLjw4A3TbqGRZXlimH3fxVxUiiRz0Ec6ZOqCiRK-Yr0guOYG4sOqqUzuh9tDc-kHN0?purpose=inline' },
-      { name: 'Пресс — скручивания в тренажёре', sets: '3 × 10–15', note: 'Не тяни голову руками. Скручивается именно корпус.', image: 'https://images.openai.com/static-rsc-4/LHuW0zczWny1gfu62v3khq6qI8Md28FG818wfNixDL_x6HF-LAoFd5dmd91rkYpZvOnt5GdB9p3ol85TMnBfBqpLQnLdhlFc4b3Mhx3I18TQBA4KWq3D8oHE5VU3XPqNMu7xlG44tXqIZw4Ls-dKUUrBmQjHj12i-48Ui1y3fCE?purpose=inline' }
+      { name: 'Chest Press — жим от груди в тренажёре', sets: '3 × 8–12', note: 'Сиденье выставляй так, чтобы рукоятки были примерно на уровне середины груди. Не бросай вес назад.', image: 'assets/equipment/chest-press.jpg', equipment: "Series 2 Chest Press Machine" },
+      { name: 'Incline Dumbbell Press — жим гантелей на наклонной', sets: '3 × 8–12', note: 'Скамья примерно 30°. Это будет одним из основных упражнений для верхней части груди.', image: 'assets/equipment/incline-bench.jpg', equipment: "Body-Solid Heavy Duty Flat-Incline-Decline Bench" },
+      { name: 'Pec Deck — «бабочка»', sets: '3 × 10–15', note: 'Главное — сводить руки грудью, а не просто толкать их плечами.', image: 'assets/equipment/pec-deck.jpg', equipment: "Series 2 Pec Fly Machine" },
+      { name: 'Lateral Raise Machine — разведение на среднюю дельту', sets: '3 × 10–15', note: 'Это упражнение я специально добавляю для визуальной ширины плеч.', image: 'assets/equipment/lateral-raise.png', equipment: "Life Fitness Insignia Lateral Raise" },
+      { name: 'Triceps Pushdown — разгибание рук на верхнем блоке', sets: '3 × 10–15', note: 'Локти стараемся держать примерно на одном месте.', image: 'assets/equipment/cable-column.jpg', equipment: "Series 2 Cable Column Machine" },
+      { name: 'Пресс — скручивания в тренажёре', sets: '3 × 10–15', note: 'Не тяни голову руками. Скручивается именно корпус.', image: 'assets/equipment/ab-crunch.png', equipment: "Body-Solid CAM Ab and Back Machine" }
     ]
   },
   B: {
     title: 'Тренировка B — спина + бицепс',
     duration: '50–65 мин',
     exercises: [
-      { name: 'Lat Pulldown — тяга верхнего блока', sets: '3 × 8–12', note: 'Тяни перекладину к верхней части груди, а не за голову.', image: 'https://images.openai.com/static-rsc-4/RL--D9sGJUX3S31AXta13voOkabG6yBhzOt_0d8EWwfMgG9P5dqS8STDTuOSx5t4Vs5nqSuyKG4GhAoxdssBRkEMk4bZfBq-TKTQDNDOh9gysgVYRzi0Y8iFTSPfEFezXvHLZ5ZPSr6YfvrW9PVlCMjgDXZNu1m8vdgOTFGgq3o?purpose=inline' },
-      { name: 'Seated Cable Row — горизонтальная тяга блока', sets: '3 × 8–12', note: 'Сначала движение локтями назад, потом возвращаем вес. Не превращай упражнение в раскачивание корпуса.', image: 'https://images.openai.com/static-rsc-4/y_ei7ysy8yF8gJE2_rdlROH2tWhMXKNLjYCk-4_wCXiKj_YbZdVqQ4LogTEVSO9ZszHnGRis0UboiiGozSF1kgQyP42D-ix-4FQxW4se-Imy2Ay94VDc8jru4lYmkGgHecHYiWiMkTvygPVWwhojRPWe2KEoZlndAzVfccuj_94?purpose=inline' },
-      { name: 'Chest Supported Row — тяга с упором грудью', sets: '3 × 8–12', note: 'Отличная штука, потому что корпус практически не помогает.', image: 'https://images.openai.com/static-rsc-4/HUSRGOohduL-7vmpyRNh4kiqXygPNQ9eBCwLboY0iXzhPrVQWHLmS6W3akEKuRRE0GwPjB4TnYSr4lXyAQmoFXBFNrVVDs--CC8lFK02F9T9ZqAViiWukLtJ5wvWoq_3PMpH5Uj5hgI7bSDUakZAyfZjMuvtKc1tGr5gDge0C9E?purpose=inline' },
-      { name: 'Reverse Pec Deck — обратная бабочка', sets: '3 × 12–15', note: 'Задняя дельта + верх спины.', image: 'https://images.openai.com/static-rsc-4/S2BaFtH9xRSdBIJ9NU06ihAW8vKRKostAbiCMDFUYO70kPJkVFrVJWYK-4HEeScrCbl0j_vuTPvtmKK7ooIzGl2n_gBAEdP9VIYWL3MBWeNMDkSErCMvGjxWkhU61-2aRXUdFCce-yi0-OxKPvbPMIzymtlVKHY8tgDLkJFZL80?purpose=inline' },
-      { name: 'Biceps Curl Machine — сгибание рук в тренажёре', sets: '3 × 10–15', note: 'Здесь я бы предпочёл тренажёр обычным подъёмам штанги — проще контролировать движение.', image: 'https://images.openai.com/static-rsc-4/7EM_XVp9i4hAa-R0IItP73JwNdO4iLwhS-7MA5WyUx_B6Dno14vZzrNCnAYKykTKVVHT7Fh7lZDx2kKq7mW6AFMVFi8rLZeRgSphFKxB5rQ1YJigY8-Wgg5e-znuFvh_F6wP0uA7iT93hGoZbJvfX5HzB2e4apt5fkH-Dm9j-Qs?purpose=inline' },
-      { name: 'Молотковые сгибания с гантелями', sets: '2 × 10–12', note: 'Сохраняем нейтральный хват и спокойное движение.', image: 'https://images.openai.com/static-rsc-4/irIOUE06yWUXnB6NhtPEeEB52tmDm1HejdNJ8KCb5OyLLOWbHCXRVayRv-5AEJczvInOMs3uB1J3Uxo8Prnp9zfMyH1HFZSIhF52HPa-55hGlGk0JSzDNt0vGpgCOiiZQ6tjaG4mOlg-7HZibnhHKukqlI5pQWy2CixWTPorOsg?purpose=inline' }
+      { name: 'Lat Pulldown — тяга верхнего блока', sets: '3 × 8–12', note: 'Тяни перекладину к верхней части груди, а не за голову.', image: 'assets/equipment/lat-row.jpg', equipment: "Body-Solid S2LAT: верхняя и горизонтальная тяга" },
+      { name: 'Seated Cable Row — горизонтальная тяга блока', sets: '3 × 8–12', note: 'Сначала движение локтями назад, потом возвращаем вес. Не превращай упражнение в раскачивание корпуса.', image: 'assets/equipment/lat-row.jpg', equipment: "Body-Solid S2LAT: верхняя и горизонтальная тяга" },
+      { name: 'Chest Supported Row — тяга с упором грудью', sets: '3 × 8–12', note: 'Отличная штука, потому что корпус практически не помогает.', image: 'assets/equipment/chest-supported-row.png', equipment: "Body-Solid Seated Row Machine, GSRM40B - now with Black Paint" },
+      { name: 'Reverse Pec Deck — обратная бабочка', sets: '3 × 12–15', note: 'Задняя дельта + верх спины.', image: 'assets/equipment/pec-deck.jpg', equipment: "Series 2 Pec Fly Machine" },
+      { name: 'Biceps Curl Machine — сгибание рук в тренажёре', sets: '3 × 10–15', note: 'Здесь я бы предпочёл тренажёр обычным подъёмам штанги — проще контролировать движение.', image: 'assets/equipment/biceps-curl.jpg', equipment: "Series 2 Arm Curl Machine" },
+      { name: 'Молотковые сгибания с гантелями', sets: '2 × 10–12', note: 'Сохраняем нейтральный хват и спокойное движение.', image: 'assets/equipment/dumbbells.jpg', equipment: "Body-Solid Tools Rubber Coat Iron Hex Dumbbells SDR" }
     ]
   },
   C: {
     title: 'Тренировка C — ноги + пресс',
     duration: '55–75 мин',
     exercises: [
-      { name: 'Leg Press — жим ногами', sets: '4 × 8–12', note: 'Стопы примерно на ширине плеч. Не выпрямляй колени резко до щелчка.', image: 'https://images.openai.com/static-rsc-4/3R6I9LLa15g8cGbFZAtpYFY2HgigmXgTKJk9kn6AOkZRfCWMJEtrV7jRuHBiYIJa2rRxPdUgT6jtaT_Cu_2bfm5mO-pw9Ee-k3kusw7eDXZL6v9dFPGY44pvOaIeks0AmuDSyH2-km7i6ZAOZUW3OI47rwzZ8sOukPOWtJiAdFU?purpose=inline' },
-      { name: 'Leg Extension — разгибание ног', sets: '3 × 10–15', note: 'Квадрицепс. Здесь можно работать достаточно контролируемо.', image: 'https://images.openai.com/static-rsc-4/M2Pp-uSkWFGA65rNhNVLXWoCZLR6EBNRxCMHcnw4FsqLumyPDQUWnKBwm2auufimSySNjZcULh_V5eROAklgcsTuHtxbkhObFcAryuTdvpnbQLamZ_3VdkR3ec8FwIwrIubnY6N-t1r414-opyn5V_p-1-v4QegEkYAJdSekoZ0?purpose=inline' },
-      { name: 'Leg Curl — сгибание ног', sets: '3 × 10–15', note: 'Задняя поверхность бедра.', image: 'https://images.openai.com/static-rsc-4/MDrsm66-aeZ6J7m-DKQjKSwZJtSfuFaKwjIuyvDulNI6g2nw6GVR-NdxOqTB8IIfaVGueEJxj8GzcWbvbJzHhYUztXygpNKdm2wl-SqVgzs1ZOAtTNPGGUI6rMic9bTJanrOSGVdwd45AAECXlbO1bggFwuJe2We9oONorVU0Vo?purpose=inline' },
-      { name: 'Calf Raise — икры', sets: '3 × 12–20', note: 'Спокойно, без лишней амплитуды и рывков.', image: 'https://images.openai.com/static-rsc-4/Pfl1Iy_UWCoxBT6I6FFUeEXYZtONkbLyPVaeH3ZnON70xKY4z0UWil-GWtGzVmq8A4DbaXgA6e2Q9RwBN_l6ZWsRRMaEk_HSbm05ycKdn9sN9Vo040FB4tT6qVX7wuDD7T9hKzctqTQUO8MMnx6E9lSHGeH0ve81gmbgIQAzt5k?purpose=inline' },
-      { name: 'Подъём коленей в упоре', sets: '3 × 10–15', note: 'Не просто поднимаем колени, а стараемся подкручивать таз вверх.', image: 'https://images.openai.com/static-rsc-4/uWXFvGgGpMVL3oU2yFK_Mk6Wh7yiMisqs21sNjmQ00nrKNlh9-uPARTb1uC_XjiN-wkk5CrFxCacKQ5loJBE31B92GpsAYOquGqX-Z87LVKcXXcMBvlVyPqkFcGYUNJySgfb8ADlXU6oVSshywX_UAa7UvROdly8gp0BEhoHGCA?purpose=inline' },
-      { name: 'Cable Crunch — скручивания на верхнем блоке', sets: '3 × 10–15', note: 'Это второе упражнение на пресс.', image: 'https://images.openai.com/static-rsc-4/LHepSXlZC-YeYcmqxgRC0Z6-tbn6QqI-o6ZAA3QXcLAlmAbyXNi_9NCW-o7eOqFP-GKMekLmLOPLluqEkPc1Eh_Oyda-4hIb_rYp37dk-MP6tVpj4n7kI5__dBtTslul2KWFWssEOhj2SfeEJOR6BUTSecgvoXCf3DIXz6QGRro?purpose=inline' }
+      { name: 'Leg Press — жим ногами', sets: '4 × 8–12', note: 'Стопы примерно на ширине плеч. Не выпрямляй колени резко до щелчка.', image: 'assets/equipment/leg-press.png', equipment: "Pro ClubLine Linear Bearing Commercial Leg Press" },
+      { name: 'Leg Extension — разгибание ног', sets: '3 × 10–15', note: 'Квадрицепс. Здесь можно работать достаточно контролируемо.', image: 'assets/equipment/leg-extension.jpg', equipment: "Pro ClubLine Leg Extension" },
+      { name: 'Leg Curl — сгибание ног', sets: '3 × 10–15', note: 'Задняя поверхность бедра.', image: 'assets/equipment/leg-curl.jpg', equipment: "Pro ClubLine Leg Curl" },
+      { name: 'Calf Raise — икры', sets: '3 × 12–20', note: 'Спокойно, без лишней амплитуды и рывков.', image: 'assets/equipment/calf-raise.png', equipment: "Body-Solid Seated Calf Raise Machine" },
+      { name: 'Подъём коленей в упоре', sets: '3 × 10–15', note: 'Не просто поднимаем колени, а стараемся подкручивать таз вверх.', image: 'assets/equipment/knee-raise.jpg', equipment: "Body-Solid Vertical Knee Raise" },
+      { name: 'Cable Crunch — скручивания на верхнем блоке', sets: '3 × 10–15', note: 'Это второе упражнение на пресс.', image: 'assets/equipment/cable-column.jpg', equipment: "Series 2 Cable Column Machine" }
     ]
   },
   recovery: {
     title: 'Восстановление / активный отдых',
     duration: '20–40 мин',
     exercises: [
-      { name: 'Бассейн или лёгкий бег', sets: '30–40 мин', note: 'Между силовыми, не перед ними. Если восстановление плохое — убери одно из двух.', image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=900&q=80' }
+      { name: 'Бассейн или лёгкий бег', sets: '30–40 мин', note: 'Между силовыми, не перед ними. Если восстановление плохое — убери одно из двух.' }
     ]
   },
   control: {
     title: 'День 29 — контрольная тренировка',
     duration: '45–60 мин',
     exercises: [
-      { name: 'Chest Press — 3×8–12', sets: '3 × 8–12', note: 'Сделай и сравни с первой неделей.', image: 'https://images.openai.com/static-rsc-4/ONOgQwaS70d4Z-Gs6U2C3wXVimTZiHT2Lt-gy-xIjxrAFUn8JcRVOFtjfI0TfnmcGYhlVZrhQW7VmhE0AGMLobtbCjERZ1UWSIT_8_lwBID9s7e4lgPypNr2YLNatOAjFJ6hNcHjC14y_ExmVzUPP1HAy7ivLJKRJyQHWmz0blM?purpose=inline' },
-      { name: 'Lat Pulldown — 3×8–12', sets: '3 × 8–12', note: 'Сравни с началом месяца.', image: 'https://images.openai.com/static-rsc-4/RL--D9sGJUX3S31AXta13voOkabG6yBhzOt_0d8EWwfMgG9P5dqS8STDTuOSx5t4Vs5nqSuyKG4GhAoxdssBRkEMk4bZfBq-TKTQDNDOh9gysgVYRzi0Y8iFTSPfEFezXvHLZ5ZPSr6YfvrW9PVlCMjgDXZNu1m8vdgOTFGgq3o?purpose=inline' },
-      { name: 'Incline Dumbbell Press — 3×8–12', sets: '3 × 8–12', note: 'Проверка средней груди.', image: 'https://images.openai.com/static-rsc-4/x43FdibMUv69GMd2rc-hQoT9nEqLCvmovbl-7BPqDsYpD3Xaq_aJl5bo4AEX2XN90BIAY47z7xYBIvKC3PCsSrnTOZ75cWne5sO7jHUTfqtktfk_dHrQv8QPyZMAprzP0dWWc4WzenB5_o72bojGuwdNgWkTwG3Dw6jkFXeThf0?purpose=inline' },
-      { name: 'Seated Row — 3×8–12', sets: '3 × 8–12', note: 'Проверка спины.', image: 'https://images.openai.com/static-rsc-4/y_ei7ysy8yF8gJE2_rdlROH2tWhMXKNLjYCk-4_wCXiKj_YbZdVqQ4LogTEVSO9ZszHnGRis0UboiiGozSF1kgQyP42D-ix-4FQxW4se-Imy2Ay94VDc8jru4lYmkGgHecHYiWiMkTvygPVWwhojRPWe2KEoZlndAzVfccuj_94?purpose=inline' },
-      { name: 'Leg Press — 3×10–12', sets: '3 × 10–12', note: 'Ноги должны быть сильнее, чем в начале месяца.', image: 'https://images.openai.com/static-rsc-4/3R6I9LLa15g8cGbFZAtpYFY2HgigmXgTKJk9kn6AOkZRfCWMJEtrV7jRuHBiYIJa2rRxPdUgT6jtaT_Cu_2bfm5mO-pw9Ee-k3kusw7eDXZL6v9dFPGY44pvOaIeks0AmuDSyH2-km7i6ZAOZUW3OI47rwzZ8sOukPOWtJiAdFU?purpose=inline' },
-      { name: 'Lateral Raise — 2×12–15', sets: '2 × 12–15', note: 'Оцени ширину плеч.', image: 'https://images.openai.com/static-rsc-4/TbtvE3-ok5zdEcJsdT6AF9HO2jSj7CdkASYd5MrsKjDrBsoAABawiI-Y5sv624inCoBhRlz59N0gRBNTSn2fnVoin4NXKhbBYzNaXfNlEn9ktwA6cEwujqjqRLVUG1uDYbz-ivgdn9-vvIjX8rC_8QWARNma-lrSdsRhKa6ibTM?purpose=inline' }
+      { name: 'Chest Press — 3×8–12', sets: '3 × 8–12', note: 'Сделай и сравни с первой неделей.', image: 'assets/equipment/chest-press.jpg', equipment: "Series 2 Chest Press Machine" },
+      { name: 'Lat Pulldown — 3×8–12', sets: '3 × 8–12', note: 'Сравни с началом месяца.', image: 'assets/equipment/lat-row.jpg', equipment: "Body-Solid S2LAT: верхняя и горизонтальная тяга" },
+      { name: 'Incline Dumbbell Press — 3×8–12', sets: '3 × 8–12', note: 'Проверка средней груди.', image: 'assets/equipment/incline-bench.jpg', equipment: "Body-Solid Heavy Duty Flat-Incline-Decline Bench" },
+      { name: 'Seated Row — 3×8–12', sets: '3 × 8–12', note: 'Проверка спины.', image: 'assets/equipment/lat-row.jpg', equipment: "Body-Solid S2LAT: верхняя и горизонтальная тяга" },
+      { name: 'Leg Press — 3×10–12', sets: '3 × 10–12', note: 'Ноги должны быть сильнее, чем в начале месяца.', image: 'assets/equipment/leg-press.png', equipment: "Pro ClubLine Linear Bearing Commercial Leg Press" },
+      { name: 'Lateral Raise — 2×12–15', sets: '2 × 12–15', note: 'Оцени ширину плеч.', image: 'assets/equipment/lateral-raise.png', equipment: "Life Fitness Insignia Lateral Raise" }
     ]
   }
 };
@@ -92,6 +92,21 @@ const storage = {
 };
 
 let selectedDay = 1;
+function hasCompleteProfile(profile) {
+  return Boolean(profile && typeof profile.name === 'string' && profile.name.trim() &&
+    Number(profile.age) >= 16 && Number(profile.age) <= 80 &&
+    ['male', 'female'].includes(profile.sex) &&
+    Number(profile.height) >= 140 && Number(profile.height) <= 220 &&
+    Number(profile.weight) >= 30 && Number(profile.weight) <= 200);
+}
+let needsOnboarding = !hasCompleteProfile(readStored(STORAGE_KEYS.profile, null));
+function renderOnboarding() {
+  document.body.classList.toggle('is-onboarding', needsOnboarding);
+  document.querySelector('#profileTitle').textContent = needsOnboarding ? 'Давай познакомимся' : 'Твой профиль';
+  document.querySelector('#profileSaveButton').textContent = needsOnboarding ? 'Сохранить и начать' : 'Сохранить изменения';
+  if (needsOnboarding) document.querySelector('#profileSaveStatus').textContent = 'Заполни свои данные, чтобы начать';
+}
+
 
 function getDifficultyConfig(difficulty) {
   const config = {
@@ -125,7 +140,7 @@ function parseSetText(text) {
 }
 
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function exerciseId(name) { return name.split(' — ')[0].replace('Seated Row', 'Seated Cable Row'); }
+function exerciseId(name) { return name.split(' — ')[0].replace('Seated Row', 'Seated Cable Row').replace(/^Lateral Raise$/, 'Lateral Raise Machine'); }
 function getAdjustedExercise(exercise) {
   if (!exercise.sets.includes('×')) return { ...exercise, loadHint: 'Комфортный темп • без гонки за результатом' };
   const base = parseSetText(exercise.sets);
@@ -154,13 +169,13 @@ function renderProfileSummary() {
   title.replaceChildren(document.createTextNode('Стань сильнее'), document.createElement('br'));
   const em = document.createElement('em'); em.textContent = 'в своём ритме.'; title.append(em);
   document.querySelector('#heroSubtitle').textContent = 'Маленькие шаги. Сильная версия тебя. Твой персональный план уже здесь.';
-  document.querySelector('#profileName').textContent = p.name;
+  document.querySelector('#profileName').textContent = p.name || 'Твой профиль';
   document.querySelector('#profileGoal').textContent = goalLabels[p.goal];
-  document.querySelector('#profileAvatar').textContent = p.name.trim().slice(0,1).toUpperCase();
-  document.querySelector('#statAge').textContent = p.age + ' лет';
-  document.querySelector('#statWeight').textContent = p.weight + ' кг';
+  document.querySelector('#profileAvatar').textContent = p.name.trim().slice(0,1).toUpperCase() || 'Я';
+  document.querySelector('#statAge').textContent = p.age ? p.age + ' лет' : '—';
+  document.querySelector('#statWeight').textContent = p.weight ? p.weight + ' кг' : '—';
   document.querySelector('#statLevel').textContent = getLevelConfig(p.level).label;
-  document.querySelector('#avatar').textContent = p.name.trim().slice(0,1).toUpperCase();
+  document.querySelector('#avatar').textContent = p.name.trim().slice(0,1).toUpperCase() || 'Я';
   document.querySelector('#adaptation').textContent = goalLabels[p.goal] + ' · ' + getDifficultyConfig(p.difficulty).label + ' · до ' + p.sessionMinutes + ' мин' + (p.readiness === 'tired' ? ' · сниженный объём' : '');
 }
 
@@ -190,19 +205,18 @@ function renderPlan() {
   const list = document.querySelector('#exerciseList');
 
   list.innerHTML = adjusted.map((exercise, index) => {
-    const key = `${selectedDay}-${index}`;
+    const key = selectedDay + '-' + index;
     const done = Boolean(storage.exercises[key]);
-    return `
-      <article class="exercise-card ${done ? 'is-done' : ''}">
-        <span class="exercise-number">${String(index + 1).padStart(2, '0')}</span>
-        <div>
-          <h3 class="exercise-name">${escapeHtml(exercise.name)}</h3>
-          <p class="exercise-meta">${exercise.sets}</p>
-          <p class="exercise-note">${escapeHtml(exercise.loadHint)}</p><details><summary>Техника выполнения</summary><p>${escapeHtml(exercise.note)}</p></details>
-        </div>
-        <button class="check ${done ? 'checked' : ''}" data-key="${key}" aria-pressed="${done}" aria-label="Отметить ${escapeHtml(exercise.name)}">${done ? '✓' : ''}</button>
-      </article>
-    `;
+    const logged = storage.tracker.filter(row => row.exerciseKey === key).length;
+    const previous = storage.tracker.filter(row => exerciseId(row.exercise) === exerciseId(exercise.name)).at(-1);
+    const strength = exercise.sets.includes('×');
+    const image = exercise.image ? '<button class="equipment-photo" type="button" data-photo="' + escapeHtml(exercise.image) + '" data-equipment="' + escapeHtml(exercise.equipment) + '" aria-label="Увеличить фото: ' + escapeHtml(exercise.equipment) + '"><img src="' + escapeHtml(exercise.image) + '" alt="' + escapeHtml(exercise.equipment) + '" loading="lazy" width="640" height="640"><span>Фото оборудования · увеличить</span></button>' : '';
+    return '<article class="exercise-card ' + (done ? 'is-done' : '') + '">' + image +
+      '<div class="exercise-content"><div class="exercise-title-row"><div><span class="exercise-number">' + String(index + 1).padStart(2, '0') + '</span><h3 class="exercise-name">' + escapeHtml(exercise.name) + '</h3></div>' +
+      '<button type="button" class="check ' + (done ? 'checked' : '') + '" data-key="' + key + '" aria-pressed="' + done + '" aria-label="Отметить ' + escapeHtml(exercise.name) + '">' + (done ? '✓' : '') + '</button></div>' +
+      '<div class="exercise-plan-row"><p class="exercise-meta">' + exercise.sets + '</p>' + (strength ? '<span class="logged-sets">Записано: ' + logged + ' / ' + parseSetText(exercise.sets).sets + '</span>' : '') + '</div>' +
+      '<p class="exercise-note">' + escapeHtml(exercise.loadHint) + '</p><details><summary>Техника выполнения</summary><p>' + escapeHtml(exercise.note) + '</p></details>' +
+      (strength ? '<details class="set-entry"><summary>Записать подход</summary><form class="quick-set-form" data-index="' + index + '"><div class="tracker-inline"><label>Вес, кг<input name="weight" type="number" min="0" max="1000" step="0.1" inputmode="decimal" required value="' + (previous ? escapeHtml(previous.weight) : '') + '" placeholder="Вес"></label><label>Повторы<input name="reps" type="number" min="1" max="100" step="1" inputmode="numeric" required placeholder="' + parseSetText(exercise.sets).min + '"></label></div><button type="submit" class="save-button">Сохранить подход</button></form></details>' : '') + '</div></article>';
   }).join('');
 
   document.querySelector('#todayLabel').textContent = `ДЕНЬ ${selectedDay}`;
@@ -254,7 +268,7 @@ function renderProgress() {
 function renderTracker() {
   document.querySelector('#trackerSummary').textContent = storage.tracker.length + ' подходов записано · ' + storage.progress.length + ' дней завершено';
   if (!storage.tracker.length) {
-    trackerTable.innerHTML = `<tr><td colspan="5">Пока нет записей. Сохрани первый вес и повторы.</td></tr>`;
+    trackerTable.innerHTML = `<tr><td colspan="5">Здесь появятся подходы, записанные в плане тренировки. Отдельно отмечать их не нужно.</td></tr>`;
     return;
   }
 
@@ -264,12 +278,13 @@ function renderTracker() {
       <td>${escapeHtml(row.exercise)}</td>
       <td>${row.weight} кг</td>
       <td>${row.reps}</td>
-      <td>${row.nextWeight ? `${row.nextWeight} кг` : '—'}</td>
+      <td>${row.day ? 'День ' + escapeHtml(row.day) : 'Вручную'}</td>
     </tr>
   `).join('');
 }
 
 function setActiveTab(tabName) {
+  if (needsOnboarding) tabName = 'profile';
   document.querySelectorAll('.tab-view').forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === tabName));
   document.querySelectorAll('.nav-item').forEach((btn) => { btn.classList.toggle('active', btn.dataset.target === tabName); btn.setAttribute('aria-current', btn.dataset.target === tabName ? 'page' : 'false'); });
 }
@@ -282,26 +297,33 @@ function attachTabEvents() {
 
 profileForm.addEventListener('submit', (event) => {
   event.preventDefault();
-  const formData = new FormData(profileForm);
-  storage.profile = {
+  const data = new FormData(profileForm);
+  const profile = {
     ...storage.profile,
-    name: String(formData.get('name') || '').trim() || defaultProfile.name,
-    age: Number(formData.get('age')) || defaultProfile.age,
-    sex: formData.get('sex') || 'male',
-    height: Number(formData.get('height')) || 178,
-    weight: Number(formData.get('weight')) || 56,
-    goal: formData.get('goal') || 'strength',
-    level: formData.get('level') || 'intermediate',
-    difficulty: formData.get('difficulty') || 'normal',
-    sessionMinutes: Number(formData.get('sessionMinutes')) || 60,
-    readiness: formData.get('readiness') || 'normal'
+    name: String(data.get('name') || '').trim(),
+    age: Number(data.get('age')),
+    sex: data.get('sex'),
+    height: Number(data.get('height')),
+    weight: Number(data.get('weight')),
+    goal: data.get('goal') || 'strength',
+    level: data.get('level') || 'beginner',
+    difficulty: data.get('difficulty') || 'normal',
+    sessionMinutes: Number(data.get('sessionMinutes')) || 60,
+    readiness: data.get('readiness') || 'normal'
   };
-  localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(storage.profile));
-  renderProfileSummary();
-  renderPlan();
+  if (!hasCompleteProfile(profile) || !Number.isInteger(profile.age) || !Number.isInteger(profile.height)) {
+    toast('Заполни имя, пол, возраст, рост и вес'); return;
+  }
+  try { localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile)); }
+  catch { toast('Не удалось сохранить профиль. Проверь доступ к хранилищу браузера'); return; }
+  const firstSave = needsOnboarding;
+  storage.profile = profile;
+  needsOnboarding = false;
+  renderOnboarding(); renderProfileSummary(); renderPlan();
   document.querySelector('#profileSaveStatus').textContent = 'Все изменения сохранены';
   profileForm.classList.remove('has-changes');
-  toast('Профиль сохранён. План обновлён');
+  if (firstSave) setActiveTab('plan');
+  toast(firstSave ? 'Профиль готов. Начнём тренировку!' : 'Профиль сохранён. План обновлён');
 });
 
 document.querySelector('#completeDay').addEventListener('click', () => {
@@ -327,35 +349,52 @@ document.querySelector('#nextDay').addEventListener('click', () => {
   renderPlan();
 });
 
+function saveSet(exercise, weightValue, repsValue, index = null) {
+  if (needsOnboarding) { setActiveTab('profile'); return false; }
+  const weight = Number(weightValue), reps = Number(repsValue);
+  if (!exercise || String(weightValue).trim() === '' || !Number.isFinite(weight) || weight < 0 || weight > 1000 || !Number.isInteger(reps) || reps < 1 || reps > 100) {
+    toast('Укажи вес от 0 до 1000 кг и 1–100 повторов'); return false;
+  }
+  const row = { date: new Date().toLocaleDateString('ru-RU'), timestamp: new Date().toISOString(), exercise, weight, reps };
+  if (index !== null) { row.day = selectedDay; row.exerciseKey = selectedDay + '-' + index; }
+  const updated = [...storage.tracker, row];
+  try { localStorage.setItem(STORAGE_KEYS.tracker, JSON.stringify(updated)); }
+  catch { toast('Не удалось сохранить подход'); return false; }
+  storage.tracker = updated;
+  renderTracker(); renderPlan(); toast('Подход записан — он уже в журнале'); return true;
+}
 document.querySelector('#saveTracker').addEventListener('click', () => {
-  const exercise = trackerExercise.value;
-  const weight = Number(trackerWeight.value);
-  const reps = Number(trackerReps.value);
-
-  if (!exercise || !Number.isFinite(weight) || weight < 0 || weight > 1000 || !Number.isInteger(reps) || reps < 1 || reps > 100 || trackerWeight.value === '') { toast('Укажи вес от 0 до 1000 кг и 1–100 повторов'); return; }
-
-  storage.tracker.push({
-    date: new Date().toLocaleDateString('ru-RU'),
-    exercise,
-    weight,
-    reps,
-    nextWeight: null
-  });
-
-  localStorage.setItem(STORAGE_KEYS.tracker, JSON.stringify(storage.tracker));
-  trackerWeight.value = '';
-  trackerReps.value = '';
-  renderTracker();
-  renderPlan();
-  toast('Подход записан');
+  if (saveSet(trackerExercise.value, trackerWeight.value, trackerReps.value)) { trackerWeight.value = ''; trackerReps.value = ''; }
 });
+document.querySelector('#exerciseList').addEventListener('submit', event => {
+  const form = event.target;
+  if (!form.classList.contains('quick-set-form')) return;
+  event.preventDefault();
+  const index = Number(form.dataset.index);
+  const exercise = getCurrentWorkout().exercises[index];
+  if (!exercise || !exercise.sets.includes('×')) return;
+  const data = new FormData(form);
+  saveSet(exercise.name, data.get('weight'), data.get('reps'), index);
+});
+const photoDialog = document.querySelector('#equipmentDialog');
+document.querySelector('#exerciseList').addEventListener('click', event => {
+  const button = event.target.closest('[data-photo]');
+  if (!button) return;
+  document.querySelector('#equipmentDialogImage').src = button.dataset.photo;
+  document.querySelector('#equipmentDialogImage').alt = button.dataset.equipment;
+  document.querySelector('#equipmentDialogTitle').textContent = button.dataset.equipment;
+  photoDialog.showModal();
+});
+document.querySelector('#closeEquipmentDialog').addEventListener('click', () => photoDialog.close());
+photoDialog.addEventListener('click', event => { if (event.target === photoDialog) photoDialog.close(); });
 
 fillProfileForm();
 renderProfileSummary();
 renderPlan();
 renderTracker();
 attachTabEvents();
-setActiveTab('plan');
+renderOnboarding();
+setActiveTab(needsOnboarding ? 'profile' : 'plan');
 
 function toast(message) { const el = document.querySelector('#toast'); el.textContent = message; el.classList.add('visible'); clearTimeout(toast.timeout); toast.timeout = setTimeout(() => el.classList.remove('visible'), 3500); }
 document.querySelector('#openProfile').addEventListener('click', () => setActiveTab('profile'));
@@ -374,6 +413,6 @@ profileForm.addEventListener('input', markProfileChanged);
 profileForm.addEventListener('change', markProfileChanged);
 profileForm.addEventListener('reset', event => {
   event.preventDefault(); fillProfileForm();
-  document.querySelector('#profileSaveStatus').textContent = 'Все изменения сохранены';
+  document.querySelector('#profileSaveStatus').textContent = needsOnboarding ? 'Заполни свои данные, чтобы начать' : 'Все изменения сохранены';
   profileForm.classList.remove('has-changes');
 });

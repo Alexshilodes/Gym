@@ -590,3 +590,45 @@ button:hover { filter:brightness(.97); }
  .profile-action-buttons .save-button { flex:1; }
 }
 @media(max-width:360px) { .body-fields { grid-template-columns:1fr; gap:16px; } .goal-choices { grid-template-columns:1fr; } }
+/* First launch and workout journal */
+.onboarding-message { display:none; border-radius:18px; padding:20px 24px; background:var(--lime); margin-bottom:24px; }
+.onboarding-message span { color:var(--ink); font-size:10px; font-weight:800; letter-spacing:.1em; }
+.onboarding-message p { color:#4b6240; font-size:13px; line-height:1.7; margin:8px 0 0; max-width:440px; }
+.is-onboarding .onboarding-message { display:block; }
+.is-onboarding .bottom-nav,.is-onboarding #openProfile,.is-onboarding .profile-overview,.is-onboarding .profile-block .stats-grid,.is-onboarding .discard-button { display:none; }
+.is-onboarding .profile-block { max-width:680px; }
+.is-onboarding .app-shell { padding-bottom:48px; }
+.logging-help { margin:0 0 8px; color:#536a4e; font-size:12px; line-height:1.7; }
+.equipment-help { margin:0 0 18px; color:var(--muted); font-size:11px; line-height:1.7; }
+.exercise-list { align-items:start; }
+.exercise-card { display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden; }
+.equipment-photo { display:flex; flex-direction:column; align-items:center; width:100%; background:white; color:var(--muted); padding:18px 16px 12px; border-bottom:1px solid #edf0e8; border-radius:18px 18px 0 0; }
+.equipment-photo img { width:100%; height:190px; object-fit:contain; background:white; }
+.equipment-photo span { font-size:10px; margin-top:12px; }
+.exercise-content { width:100%; padding:20px; }
+.exercise-title-row { display:flex; align-items:flex-start; gap:12px; }
+.exercise-title-row > div { flex:1; min-width:0; }
+.exercise-title-row .exercise-number { display:block; padding:0; font-size:10px; color:#8d9d80; margin:0 0 6px; letter-spacing:.08em; }
+.exercise-title-row .check { flex:none; }
+.exercise-plan-row { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-top:6px; }
+.logged-sets { font-size:11px; color:var(--muted); }
+.set-entry { border-top:1px solid var(--line); margin-top:16px; padding-top:14px; }
+.set-entry > summary { display:list-item; color:var(--ink); font-size:12px; font-weight:800; min-height:30px; padding-top:4px; }
+.quick-set-form { display:grid; gap:12px; padding-top:12px; }
+.quick-set-form label { display:grid; gap:6px; font-size:11px; font-weight:700; color:var(--muted); }
+.quick-set-form input { width:100%; min-width:0; border:1px solid var(--line); border-radius:10px; background:#f8faf5; min-height:46px; padding:10px 12px; font-size:16px; color:var(--ink); }
+.quick-set-form input:focus { outline:2px solid #749853; outline-offset:2px; background:white; }
+.quick-set-form .save-button { min-height:44px; font-size:12px; }
+.manual-entry { padding:16px 20px; border:1px solid var(--line); border-radius:16px; background:white; margin:0 0 20px; }
+.manual-entry > summary { font-size:12px; font-weight:700; color:var(--ink); min-height:32px; padding-top:5px; }
+.manual-entry .tracker-form { border:0; padding:16px 0 0; border-radius:0; }
+.equipment-dialog { width:min(620px,calc(100vw - 32px)); max-height:calc(100dvh - 40px); border:0; border-radius:20px; padding:24px; background:white; color:var(--ink); overflow:auto; }
+.equipment-dialog::backdrop { background:rgba(20,35,26,.65); backdrop-filter:blur(4px); }
+.equipment-dialog > button { display:block; margin-left:auto; padding:12px 16px; border-radius:10px; background:var(--soft); color:var(--ink); font-size:12px; font-weight:700; min-height:44px; }
+.equipment-dialog h2 { font-size:18px; margin:18px 0; line-height:1.5; }
+.equipment-dialog img { width:100%; max-height:55dvh; object-fit:contain; background:white; }
+.equipment-dialog p { color:var(--muted); font-size:12px; margin:20px 0 0; line-height:1.7; }
+@media(max-width:540px) { .exercise-card { padding:0; } .exercise-content { padding:18px; } .equipment-photo img { height:200px; } .onboarding-message { padding:18px 20px; } .is-onboarding .profile-actions .save-button { width:100%; } }
+
+.is-onboarding .tab-view[data-tab="plan"], .is-onboarding .tab-view[data-tab="tracker"] { display:none; }
+.is-onboarding .tab-view[data-tab="profile"] { display:block; }
