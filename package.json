@@ -1,0 +1,10 @@
+{
+  "name": "forma-gym",
+  "private": true,
+  "scripts": {
+    "test": "node verify.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "^29.0.0"
+  }
+}

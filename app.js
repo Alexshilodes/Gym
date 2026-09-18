@@ -1,5 +1,32 @@
+﻿// Additional exercises. Equipment photos show examples, not exercise demonstrations.
+const extraExerciseData = [
+ {id:'db-squat',name:'Приседания с гантелью у груди',group:'dumbbells',muscles:'Ноги · ягодицы',sets:'3 × 10–12',note:'Держи гантель у груди. Опускайся в удобную глубину, колени направляй по линии стоп.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-rdl',name:'Румынская тяга с гантелями',group:'dumbbells',muscles:'Задняя поверхность бедра · ягодицы',sets:'3 × 8–12',note:'Отводи таз назад, держи гантели близко к ногам. Не округляй спину; глубина зависит от подвижности.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-lunge',name:'Обратные выпады с гантелями',group:'dumbbells',muscles:'Ноги · ягодицы',sets:'3 × 8–12',note:'Сделай шаг назад и опустись без удара коленом о пол. Повторы указаны на каждую ногу.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-row',name:'Тяга гантели с опорой на скамью',group:'dumbbells',muscles:'Спина',sets:'3 × 10–12',note:'Опирайся на скамью, не разворачивай корпус. Веди локоть к тазу. Повторы — на каждую сторону.',image:'assets/equipment/incline-bench.jpg',equipment:'Скамья для тяги с гантелью'},
+ {id:'db-shoulder',name:'Жим гантелей сидя',group:'dumbbells',muscles:'Плечи · трицепс',sets:'3 × 8–12',note:'Настрой спинку скамьи близко к вертикали. Не прогибай поясницу; двигайся в комфортной амплитуде.',image:'assets/equipment/incline-bench.jpg',equipment:'Регулируемая скамья'},
+ {id:'db-lateral',name:'Разведения гантелей в стороны',group:'dumbbells',muscles:'Плечи',sets:'3 × 10–15',note:'Слегка согни локти. Поднимай руки примерно до уровня плеч, без рывков.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-curl',name:'Сгибания рук с гантелями',group:'dumbbells',muscles:'Бицепс',sets:'3 × 10–15',note:'Держи локти возле корпуса. Опускай гантели плавно, не раскачивайся.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-triceps',name:'Разгибание рук с гантелью над головой',group:'dumbbells',muscles:'Трицепс',sets:'2 × 10–15',note:'Держи гантель двумя руками. Не переразгибай поясницу, выбирай комфортную амплитуду.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантель'},
+ {id:'db-floor-press',name:'Жим гантелей лёжа на полу',group:'dumbbells',muscles:'Грудь · трицепс',sets:'3 × 8–12',note:'Опускай локти до мягкого касания пола и выжимай гантели без удара друг о друга.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-split-squat',name:'Сплит-присед с гантелями',group:'dumbbells',muscles:'Ноги · ягодицы',sets:'2 × 8–12',note:'Стопы остаются на месте в разножке. Опускайся вертикально и держи равновесие. Повторы — на каждую ногу.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-calf',name:'Подъёмы на носки с гантелями',group:'dumbbells',muscles:'Икры',sets:'3 × 12–20',note:'При необходимости держись за устойчивую опору. Поднимайся и опускайся плавно.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'db-rear',name:'Разведения гантелей в наклоне',group:'dumbbells',muscles:'Задняя дельта · верх спины',sets:'2 × 10–15',note:'Наклонись с нейтральной спиной. Разводи руки без раскачивания и пожимания плечами.',image:'assets/equipment/dumbbells.jpg',equipment:'Гантели'},
+ {id:'treadmill-walk',name:'Ходьба на беговой дорожке',group:'cardio',muscles:'Умеренное кардио',kind:'cardio',minutes:25,sets:'25 мин',note:'Начни с 5 минут спокойной ходьбы. Выбери темп, при котором можешь говорить фразами, и закончи 3–5 минутами заминки.',image:'assets/equipment/treadmill.jpg',equipment:'Беговая дорожка'},
+ {id:'treadmill-incline',name:'Ходьба с наклоном на дорожке',group:'cardio',muscles:'Кардио · ноги',kind:'cardio',minutes:20,sets:'20 мин',note:'Добавляй наклон только если обычная ходьба комфортна. Не висни на поручнях; снижай наклон или скорость при усталости.',image:'assets/equipment/treadmill.jpg',equipment:'Беговая дорожка с наклоном'},
+ {id:'treadmill-jog',name:'Лёгкий бег на дорожке',group:'cardio',muscles:'Кардио',kind:'cardio',minutes:20,sets:'20 мин',note:'Начни и закончи ходьбой. Выбирай комфортный бег; если он пока труден, чередуй короткие отрезки бега и ходьбы.',image:'assets/equipment/treadmill.jpg',equipment:'Беговая дорожка'},
+ {id:'treadmill-alternate',name:'Чередование ходьбы и лёгкого бега',group:'cardio',muscles:'Кардио',kind:'cardio',minutes:20,sets:'20 мин',note:'После разминки чередуй 1 минуту комфортного бега и 2 минуты ходьбы. Можно оставить только ходьбу.',image:'assets/equipment/treadmill.jpg',equipment:'Беговая дорожка'},
+ {id:'bike',name:'Велотренажёр — ровный темп',group:'cardio',muscles:'Кардио · ноги',kind:'cardio',minutes:25,sets:'25 мин',note:'Настрой высоту сиденья и умеренное сопротивление. Держи ровный темп, при котором можешь говорить фразами.',image:'assets/equipment/exercise-bike.jpg',equipment:'Велотренажёр'},
+ {id:'elliptical',name:'Эллиптический тренажёр',group:'cardio',muscles:'Кардио · всё тело',kind:'cardio',minutes:20,sets:'20 мин',note:'Начни с лёгкого сопротивления. Держи корпус устойчивым, не делай резких движений.',image:'assets/equipment/elliptical.jpg',equipment:'Эллиптический тренажёр'}
+, {"id":"db-fly","name":"Разведения гантелей лёжа","group":"dumbbells","muscles":"Грудь","sets":"2 × 10–15","note":"Используй небольшой вес и слегка согни локти. Не опускай плечи глубоко ниже корпуса.","image":"assets/equipment/incline-bench.jpg","equipment":"Скамья и гантели"},
+{"id":"db-crunch","name":"Скручивания с лёгкой гантелью","group":"dumbbells","muscles":"Пресс","sets":"2 × 10–15","note":"Ляг на пол и держи лёгкую гантель у груди. Приподнимай лопатки, без рывков шеей. Можно выполнять без гантели.","image":"assets/equipment/dumbbells.jpg","equipment":"Лёгкая гантель"},
+{"id":"db-bent-row","name":"Тяга двух гантелей в наклоне","group":"dumbbells","muscles":"Спина","sets":"3 × 8–12","note":"Отведи таз назад, сохраняй устойчивую спину. Подтягивай локти к корпусу без раскачивания.","image":"assets/equipment/dumbbells.jpg","equipment":"Гантели"},
+{"id":"db-supported-row","name":"Тяга гантелей с упором грудью","group":"dumbbells","muscles":"Спина","sets":"3 × 8–12","note":"Ляг грудью на наклонную скамью. Веди локти назад без подъёма корпуса.","image":"assets/equipment/incline-bench.jpg","equipment":"Наклонная скамья и гантели"}
+];
+
 ﻿const STORAGE_KEYS = {
   profile: 'gym-profile',
+  draft: 'gym-profile-draft',
   progress: 'gym-progress',
   tracker: 'gym-tracker',
   exercises: 'gym-exercises',
@@ -86,7 +113,7 @@ const profileForm = document.querySelector('#profileForm');
 const trackerTable = document.querySelector('#trackerTable');
 function readStored(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
 const storage = {
-  profile: { ...defaultProfile, ...readStored(STORAGE_KEYS.profile, {}) },
+  profile: { ...defaultProfile, ...readStored(STORAGE_KEYS.profile, {}), ...readStored(STORAGE_KEYS.draft, {}) },
   progress: readStored(STORAGE_KEYS.progress, []),
   tracker: readStored(STORAGE_KEYS.tracker, []),
   exercises: readStored(STORAGE_KEYS.exercises, {}),
@@ -95,6 +122,17 @@ const storage = {
   bodyWeight: readStored(STORAGE_KEYS.bodyWeight, [])
 };
 
+storage.profile.sessionMinutes = Number(storage.profile.sessionMinutes) || 60;
+storage.profile.name = typeof storage.profile.name === 'string' ? storage.profile.name : '';
+for (const key of ['progress','tracker','bodyWeight']) if (!Array.isArray(storage[key])) storage[key] = [];
+storage.progress = storage.progress.filter(day => Number.isInteger(day) && day >= 1 && day <= 30);
+storage.tracker = storage.tracker.filter(row => row && typeof row.exercise === 'string' && (row.kind === 'cardio' ? Number.isFinite(Number(row.minutes)) : Number.isFinite(Number(row.weight)) && Number.isFinite(Number(row.reps))));
+storage.bodyWeight = storage.bodyWeight.filter(row => row && Number.isFinite(Number(row.weight)) && Number(row.weight) >= 30 && Number(row.weight) <= 200);
+for (const key of ['exercises','programProgress']) if (!storage[key] || typeof storage[key] !== 'object' || Array.isArray(storage[key])) storage[key] = {};
+for (const [key, choices] of Object.entries({goal:['strength','mass','weightloss','tone','general'],level:['beginner','intermediate','advanced'],difficulty:['light','normal','hard'],equipment:['machines','mixed','dumbbells'],readiness:['good','normal','tired'],sessionMinutes:[30,45,60,75]})) {
+ if (!choices.includes(storage.profile[key])) storage.profile[key] = defaultProfile[key];
+}
+if (!Array.isArray(storage.programProgress.weightloss)) storage.programProgress.weightloss = [];
 const exerciseLibrary = [
   ...Object.entries(baseWorkoutData).filter(([key]) => ['A','B','C'].includes(key)).flatMap(([key, workout]) => workout.exercises.map((exercise, index) => ({...exercise, id:'base-' + key + '-' + index, group:/Dumbbell|гантел/.test(exercise.name) ? 'dumbbells' : 'machines', muscles:key === 'A' ? 'Грудь · плечи · трицепс' : key === 'B' ? 'Спина · бицепс' : 'Ноги · пресс'}))),
   ...extraExerciseData
@@ -120,7 +158,7 @@ function saveCurrentProgress() { localStorage.setItem(storage.program === 'stren
 function exerciseKey(index) {
   const prefix = storage.program === 'strength' ? '' : storage.program + '-';
   const exercise = getCurrentWorkout().exercises[index];
-  const variant = storage.profile.equipment !== 'machines' ? '-variant-' + exerciseId(exercise?.name || '') : '';
+  const variant = '-movement-' + exerciseId(exercise?.name || '');
   return prefix + selectedDay + '-' + index + variant;
 }
 let selectedDay = 1;
@@ -131,7 +169,11 @@ function hasCompleteProfile(profile) {
     Number(profile.height) >= 140 && Number(profile.height) <= 220 &&
     Number(profile.weight) >= 30 && Number(profile.weight) <= 200);
 }
-let needsOnboarding = !hasCompleteProfile(readStored(STORAGE_KEYS.profile, null));
+// Recover a complete draft even if the page was refreshed before autosave's debounce finished.
+if (hasCompleteProfile(storage.profile) && readStored(STORAGE_KEYS.draft, null)) {
+ try { localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(storage.profile)); localStorage.removeItem(STORAGE_KEYS.draft); } catch {}
+}
+let needsOnboarding = !hasCompleteProfile(storage.profile);
 function renderOnboarding() {
   document.body.classList.toggle('is-onboarding', needsOnboarding);
   document.querySelector('#profileTitle').textContent = needsOnboarding ? 'Давай познакомимся' : 'Твой профиль';
@@ -178,14 +220,65 @@ function chooseVariant(exercise) {
   return replacement ? {...replacement, sets:exercise.sets} : exercise;
 }
 function getProgramExerciseIndex(name) { return exerciseLibrary.findIndex(ex => exerciseId(ex.name) === exerciseId(name)); }
-function getCurrentWorkout() {
-  const program = programs[storage.program];
-  const type = program.schedule[selectedDay - 1];
-  const workout = program.workouts[type] || program.workouts.recovery;
-  const unique = new Set();
-  const exercises = workout.exercises.map(chooseVariant).filter(exercise => { const id = exerciseId(exercise.name); if (unique.has(id)) return false; unique.add(id); return true; });
-  return {...workout, exercises};
+// Deterministic movement-based selection. No random changes on refresh.
+function buildWorkout(profile, day) {
+  const p = profile, goal = p.goal, full = ['weightloss','tone','general'].includes(goal);
+  const type = programs[goal === 'weightloss' ? 'weightloss' : 'strength'].schedule[day - 1];
+  const week = Math.floor((day - 1) / 7), session = Number(p.sessionMinutes) || 60;
+  const tired = p.readiness === 'tired', simple = p.level === 'beginner' || tired;
+  const used = new Set();
+  const pools = {
+    squat:['base-C-0','db-squat','db-split-squat','db-lunge'],
+    hinge:['base-C-2','db-rdl'], push:['base-A-0','db-floor-press','base-A-1'],
+    pull:['base-B-0','base-B-1','base-B-2','db-row','db-supported-row','db-bent-row'],
+    shoulder:['base-A-3','db-lateral','db-shoulder'], chest:['base-A-2','db-fly'],
+    triceps:['base-A-4','db-triceps'], biceps:['base-B-4','db-curl','base-B-5'],
+    rear:['base-B-3','db-rear'], quad:['base-C-1','db-lunge','db-split-squat'],
+    calf:['base-C-3','db-calf'], core:['base-A-5','db-crunch','base-C-4','base-C-5']
+  };
+  function pick(pattern) {
+    let candidates = pools[pattern].map(libraryItem).filter(Boolean).filter(ex => !used.has(ex.id));
+    candidates = candidates.filter(ex => p.equipment === 'mixed' || (p.equipment === 'dumbbells' ? ex.group === 'dumbbells' : ex.group === 'machines'));
+    candidates.sort((a,b) => score(b) - score(a) || a.id.localeCompare(b.id));
+    function score(ex) {
+      const complex = ['db-rdl','db-lunge','db-split-squat','db-bent-row','db-shoulder','db-fly'].includes(ex.id);
+      let value = simple ? (ex.group === 'machines' ? 8 : 0) - (complex ? 6 : 0) : (ex.group === 'dumbbells' ? 5 : 0);
+      if (goal === 'strength') value += ['base-C-0','base-A-0','base-B-0','db-rdl','base-A-1','db-shoulder'].includes(ex.id) ? 5 : 0;
+      if (goal === 'mass') value += ['base-A-1','base-B-2','db-rdl','db-supported-row'].includes(ex.id) ? 7 : 0;
+      if (goal === 'general') value += ['base-B-1','db-floor-press','db-squat'].includes(ex.id) ? 5 : 0;
+      // Stable weekly alternation only for sufficiently experienced trainees.
+      if (!simple && !['strength','mass'].includes(goal)) value += (exerciseLibrary.indexOf(ex) + week + day) % 3;
+      return value;
+    }
+    const ex = candidates[0]; if (ex) { used.add(ex.id); return {...ex}; } return null;
+  }
+  function cardio(minutes, easy = false) {
+    if (p.equipment === 'dumbbells') return {name:'Ходьба на улице', kind:'cardio',minutes,sets:minutes+' мин',note:'Комфортный темп, при котором можешь говорить фразами.',image:null,equipment:null};
+    const id = easy || simple || goal === 'general' ? 'treadmill-walk' : goal === 'tone' ? 'elliptical' : ['bike','treadmill-incline'][week % 2];
+    return {...libraryItem(id),minutes,sets:minutes+' мин'};
+  }
+  if (type === 'rest') return {title:'День отдыха',exercises:[]};
+  if (['cardio','easy','recovery'].includes(type)) return {title:type === 'cardio' ? 'Кардио · комфортный темп' : 'Активное восстановление',exercises:[cardio(Math.min(session - 7, tired ? 15 : type === 'cardio' ? 30 : 20),type !== 'cardio')]};
+  let patterns;
+  if (full) {
+    const index = type === 'WL_B' || type === 'B' ? 1 : type === 'WL_C' || type === 'C' ? 2 : 0;
+    patterns = [['squat','push','pull','hinge','core'],['hinge','pull','push','squat','core'],['squat','pull','shoulder','hinge','core']][index];
+    if (goal === 'general') patterns = ['squat','pull','push','core'];
+    if (goal === 'tone') patterns.push('shoulder');
+  } else if (type === 'control') patterns = ['push','pull','squat','hinge','shoulder'];
+  else patterns = {A:['push','chest','shoulder','triceps','core'],B:['pull','rear','biceps','core'],C:['squat','hinge','quad','calf','core']}[type];
+  if (goal === 'strength' && type === 'A') patterns = ['push','shoulder','triceps','core'];
+  if (p.level === 'advanced' && !tired && session >= 60 && goal === 'strength' && type === 'B') patterns.splice(1,0,'pull');
+  if (goal === 'mass' && !tired && session >= 60) patterns.splice(1,0,type === 'A' ? 'push' : type === 'B' ? 'pull' : 'squat');
+  const includeCardio = full;
+  const count = tired || p.difficulty === 'light' ? 3 : session <= 30 ? 3 : session <= 45 ? 4 : simple ? 5 : 6;
+  // At least two useful sets per movement; remove accessories before squeezing all sets to one.
+  const cap = Math.max(2,Math.floor((session - 7 - (includeCardio ? 5 : 0)) / 6));
+  const exercises = patterns.slice(0,Math.min(count,cap)).map(pick).filter(Boolean);
+  if (includeCardio) exercises.push(cardio(session <= 30 ? 5 : goal === 'weightloss' ? 12 : 8));
+  return {title:full ? (goalLabels[goal] + ' · всё тело ' + (type.replace('WL_',''))) : baseWorkoutData[type].title,exercises};
 }
+function getCurrentWorkout() { return buildWorkout(storage.profile, selectedDay); }
 function estimateMinutes(exercises) {
   if (!exercises.length) return 0;
   return exercises.reduce((sum, ex) => sum + (ex.kind === 'cardio' ? ex.minutes : ex.sets.includes('×') ? parseSetText(ex.sets).sets * 3 : 30), 7);
@@ -226,7 +319,7 @@ function getAdjustedExercise(exercise) {
   let min = base.min, max = base.max;
   if (storage.profile.goal === 'strength' && base.min <= 8) { min = 6; max = 10; }
   if (['tone','general','weightloss'].includes(storage.profile.goal)) { min = 10; max = 15; }
-  const previous = storage.tracker.filter(row => row.kind !== 'cardio' && exerciseId(row.exercise) === exerciseId(exercise.name)).at(-1);
+  const previous = storage.tracker.filter(row => row.kind !== 'cardio' && exerciseId(row.exercise) === exerciseId(exercise.name)).slice(-1)[0];
   const loadHint = previous ? 'Последний подход: ' + previous.weight + ' кг × ' + previous.reps + ' • начни с знакомой нагрузки' : 'Подбери вес с запасом 2–3 повтора';
   return { ...exercise, sets: sets + ' × ' + min + '–' + max, loadHint };
 }
@@ -271,7 +364,7 @@ function renderPlan() {
     const key = exerciseKey(index);
     const done = Boolean(storage.exercises[key]);
     const logged = storage.tracker.filter(row => row.exerciseKey === key && exerciseId(row.exercise) === exerciseId(exercise.name)).length;
-    const previous = storage.tracker.filter(row => exerciseId(row.exercise) === exerciseId(exercise.name)).at(-1);
+    const previous = storage.tracker.filter(row => exerciseId(row.exercise) === exerciseId(exercise.name)).slice(-1)[0];
     const strength = exercise.sets.includes('×');
     const image = exercise.image ? '<button class="equipment-photo" type="button" data-photo="' + escapeHtml(exercise.image) + '" data-equipment="' + escapeHtml(exercise.equipment) + '" aria-label="Увеличить фото: ' + escapeHtml(exercise.equipment) + '"><img src="' + escapeHtml(exercise.image) + '" alt="' + escapeHtml(exercise.equipment) + '" loading="lazy" width="640" height="640"><span>Фото оборудования · увеличить</span></button>' : '';
     return '<article class="exercise-card ' + (done ? 'is-done' : '') + '">' + image +
@@ -285,7 +378,7 @@ function renderPlan() {
   document.querySelector('#todayLabel').textContent = `ДЕНЬ ${selectedDay}`;
   document.querySelector('#workoutTitle').textContent = workout.title;
   document.querySelector('#durationBadge').textContent = adjusted.length ? '≈ ' + estimateMinutes(adjusted) + ' мин' : 'Отдых';
-  document.querySelector('#programGoalBadge').textContent = programs[storage.program].name + ' · подобрано по цели';
+  document.querySelector('#programGoalBadge').textContent = goalLabels[storage.profile.goal] + ' · персональный план';
   document.querySelector('#programLabel').textContent = programs[storage.program].label;
   document.querySelector('#programIntro').textContent = storage.program === 'weightloss' ? 'Больше движения. Устойчивый ритм.' : '30 дней, чтобы стать сильнее.';
   document.querySelector('#programDescription').textContent = programs[storage.program].description;
@@ -355,7 +448,7 @@ function renderTracker() {
 
 function setActiveTab(tabName) {
   if (needsOnboarding) tabName = 'profile';
-  document.querySelectorAll('.tab-view').forEach((tab) => tab.classList.toggle('active', tab.dataset.tab === tabName));
+  document.querySelectorAll('.tab-view').forEach((tab) => { tab.classList.toggle('active', tab.dataset.tab === tabName); tab.hidden = tab.dataset.tab !== tabName; });
   document.querySelectorAll('.nav-item').forEach((btn) => { btn.classList.toggle('active', btn.dataset.target === tabName); btn.setAttribute('aria-current', btn.dataset.target === tabName ? 'page' : 'false'); });
 }
 
@@ -385,7 +478,7 @@ profileForm.addEventListener('submit', (event) => {
   if (!hasCompleteProfile(profile) || !Number.isInteger(profile.age) || !Number.isInteger(profile.height)) {
     toast('Заполни имя, пол, возраст, рост и вес'); return;
   }
-  try { localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile)); }
+  try { localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile)); localStorage.removeItem(STORAGE_KEYS.draft); }
   catch { toast('Не удалось сохранить профиль. Проверь доступ к хранилищу браузера'); return; }
   const firstSave = needsOnboarding;
   storage.profile = profile;
@@ -462,12 +555,14 @@ document.querySelector('#exerciseList').addEventListener('click', event => {
 document.querySelector('#closeEquipmentDialog').addEventListener('click', () => photoDialog.close());
 photoDialog.addEventListener('click', event => { if (event.target === photoDialog) photoDialog.close(); });
 
+attachTabEvents();
+renderOnboarding();
+setActiveTab(needsOnboarding ? 'profile' : 'plan');
 fillProfileForm();
 renderProfileSummary();
 renderPlan();
 renderTracker();
 renderBodyWeight();
-attachTabEvents();
 renderOnboarding();
 setActiveTab(needsOnboarding ? 'profile' : 'plan');
 
@@ -483,10 +578,18 @@ function markProfileChanged() {
   document.querySelector('#profileSaveStatus').textContent = 'Есть несохранённые изменения';
   profileForm.classList.add('has-changes');
 }
-profileForm.addEventListener('input', markProfileChanged);
-profileForm.addEventListener('change', markProfileChanged);
+let profileSaveDelay;
+function persistProfileEdits() {
+ markProfileChanged();
+ const draft = Object.fromEntries(new FormData(profileForm));
+ try { localStorage.setItem(STORAGE_KEYS.draft, JSON.stringify(draft)); } catch { toast('Браузер не разрешает сохранять данные сайта'); }
+ clearTimeout(profileSaveDelay);
+ profileSaveDelay = setTimeout(() => { if (profileForm.checkValidity()) profileForm.requestSubmit(); }, 700);
+}
+profileForm.addEventListener('input', persistProfileEdits);
+profileForm.addEventListener('change', persistProfileEdits);
 profileForm.addEventListener('reset', event => {
-  event.preventDefault(); fillProfileForm();
+  event.preventDefault(); clearTimeout(profileSaveDelay); localStorage.removeItem(STORAGE_KEYS.draft); fillProfileForm();
   document.querySelector('#profileSaveStatus').textContent = needsOnboarding ? 'Заполни свои данные, чтобы начать' : 'Все изменения сохранены';
   profileForm.classList.remove('has-changes');
 });
@@ -507,7 +610,7 @@ function saveCardio(exercise, minutesValue, speedValue = '', inclineValue = '', 
 }
 function saveBodyWeight(value, context = 'after') {
   if (needsOnboarding) { setActiveTab('profile'); return false; }
-  const weight = Number(value);
+  const weight = Number(String(value).replace(',', '.'));
   if (String(value ?? '').trim() === '' || !Number.isFinite(weight) || weight < 30 || weight > 200 || !['after','morning','other'].includes(context)) {
     toast('Укажи вес тела от 30 до 200 кг'); return false;
   }
@@ -516,6 +619,7 @@ function saveBodyWeight(value, context = 'after') {
   const profile = {...storage.profile, weight};
   try {
     localStorage.setItem(STORAGE_KEYS.bodyWeight, JSON.stringify(updated));
+    const draft = readStored(STORAGE_KEYS.draft, null); if (draft) localStorage.setItem(STORAGE_KEYS.draft, JSON.stringify({...draft, weight}));
     localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify(profile));
   } catch { toast('Не удалось сохранить вес тела'); return false; }
   storage.bodyWeight = updated; storage.profile = profile;
@@ -525,21 +629,27 @@ function saveBodyWeight(value, context = 'after') {
 }
 function renderBodyWeight() {
   const rows = storage.bodyWeight;
-  const last = rows.at(-1);
-  const initial = rows[0]?.beforeWeight ?? last?.weight;
+  const last = rows.slice(-1)[0];
+  const initial = Number(rows[0]?.beforeWeight) || Number(rows[0]?.weight) || Number(last?.weight);
   const delta = last ? Math.round((last.weight - initial) * 10) / 10 : 0;
-  document.querySelector('#bodyWeightSummary').textContent = last ? last.weight + ' кг · ' + (delta > 0 ? '+' : '') + delta + ' кг от исходного веса · ' + rows.length + ' замеров' : 'Пока нет замеров. Первый вес можно записать после тренировки.';
+  document.querySelector('#bodyWeightSummary').innerHTML = '<div class="weight-metric"><span>Последний замер</span><strong>' + (last ? escapeHtml(last.weight) : '—') + '<small> кг</small></strong><p>' + (last ? escapeHtml(last.date) : 'Добавь первый замер') + '</p></div><div class="weight-metric"><span>От первого веса</span><strong>' + (last ? (delta > 0 ? '+' : '') + delta : '—') + '<small> кг</small></strong><p>' + rows.length + ' замеров в истории</p></div>';
   const labels = {after:'После тренировки',morning:'Утром',other:'Другой замер'};
   document.querySelector('#bodyWeightTable').innerHTML = rows.length ? rows.slice().reverse().map(row => '<tr><td>' + escapeHtml(row.date) + '</td><td>' + escapeHtml(row.weight) + ' кг</td><td>' + escapeHtml(labels[row.context] || 'Другой замер') + '</td></tr>').join('') : '<tr><td colspan="3">История веса тела появится здесь.</td></tr>';
   document.querySelector('#planWeightStatus').textContent = last ? 'Последний замер: ' + last.weight + ' кг · ' + last.date : '';
 }
-for (const id of ['#planBodyWeightForm', '#journalBodyWeightForm']) {
-  document.querySelector(id).addEventListener('submit', event => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    if (saveBodyWeight(data.get('bodyWeight'), data.get('context') || 'after')) event.target.reset();
-  });
-}
+const weightDialog = document.querySelector('#weightDialog');
+let weightTrigger = null;
+function closeWeightDialog() { if (typeof weightDialog.close === 'function') weightDialog.close(); else weightDialog.removeAttribute('open'); weightTrigger?.focus(); }
+document.querySelectorAll('[data-open-weight]').forEach(button => button.addEventListener('click', () => {
+ weightTrigger = button; const field = document.querySelector('#bodyWeightInput'); field.value = storage.profile.weight || '';
+ if (typeof weightDialog.showModal === 'function') weightDialog.showModal(); else weightDialog.setAttribute('open','');
+ field.focus(); field.select();
+}));
+document.querySelector('#closeWeightDialog').addEventListener('click',closeWeightDialog);
+document.querySelector('#planBodyWeightForm').addEventListener('submit', event => {
+ event.preventDefault(); const data = new FormData(event.target);
+ if (saveBodyWeight(data.get('bodyWeight'), data.get('context') || 'after')) {event.target.reset(); closeWeightDialog();}
+});
 document.querySelector('#editTrainingGoal').addEventListener('click', () => setActiveTab('profile'));
 
 renderTimer();

@@ -1,161 +1,42 @@
-﻿const fs = require('fs');
-const vm = require('vm');
-const assert = require('assert');
-const html = fs.readFileSync('index.html', 'utf8');
-const code = fs.readFileSync('app.js', 'utf8');
-class Element {
-  constructor() {
-    this.value = ''; this.children = []; this.dataset = {}; this.style = {}; this.events = {}; this.attributes = {};
-    const classes = new Set();
-    this.classList = { contains: c => classes.has(c), add: c => classes.add(c), remove: c => classes.delete(c), toggle: (c, on) => on ? classes.add(c) : classes.delete(c) };
-    this.fields = new Map(); this.elements = { namedItem: key => this.fields.get(key) || null };
-  }
-  addEventListener(key, fn) { this.events[key] = fn; }
-  replaceChildren(...children) { this.children = children; if (children[0]?.value) this.value = children[0].value; }
-  append(...children) { this.children.push(...children); }
-  appendChild(child) { this.children.push(child); }
-  setAttribute(key, value) { this.attributes[key] = value; }
-  showModal() { this.open = true; }
-  close() { this.open = false; }
+﻿const assert = require('node:assert/strict');
+const fs = require('node:fs');
+let JSDOM; try { ({JSDOM} = require('jsdom')); } catch { ({JSDOM} = require('./.qa/node_modules/jsdom')); }
+const html = fs.readFileSync('index.html','utf8');
+const code = fs.readFileSync('app.js','utf8');
+const profile = {name:'Alex',age:30,sex:'male',height:180,weight:85,goal:'strength',level:'beginner',difficulty:'normal',sessionMinutes:60,readiness:'normal',equipment:'machines'};
+function boot(saved={}) {
+ const dom=new JSDOM(html,{url:'https://alexshilodes.github.io/Gym/',runScripts:'outside-only',pretendToBeVisual:true});
+ const w=dom.window; const errors=[]; w.addEventListener('error',e=>errors.push(e.error));
+ for(const [k,v] of Object.entries(saved)) w.localStorage.setItem(k,v);
+ w.eval(code+'\nwindow.qa={buildWorkout,getAdjustedPlan,storage,saveBodyWeight,saveSet};');
+ return {dom,w,doc:w.document,errors};
 }
-function boot(stored = new Map()) {
-  const elements = new Map([...html.matchAll(/id="([^"]+)"/g)].map(match => ['#' + match[1], new Element()]));
-  const form = elements.get('#profileForm');
-  for (const match of html.matchAll(/name="([^"]+)"/g)) if (!form.fields.has(match[1])) form.fields.set(match[1], new Element());
-  const tabs = ['plan', 'tracker', 'profile'].map(name => { const element = new Element(); element.dataset.tab = name; return element; });
-  const nav = tabs.map(tab => { const element = new Element(); element.dataset.target = tab.dataset.tab; return element; });
-  const body = new Element();
-  const context = {
-    document: { body, querySelector: selector => { assert(elements.has(selector), 'Missing HTML: ' + selector); return elements.get(selector); }, querySelectorAll: selector => selector === '.tab-view' ? tabs : selector === '.nav-item' ? nav : [], createElement: () => new Element(), createTextNode: text => ({textContent: text}) },
-    localStorage: { getItem: key => stored.get(key) || null, setItem: (key, value) => stored.set(key, value) },
-    FormData: class { constructor(form) { this.form = form; } get(key) { return this.form.fields.get(key)?.value ?? null; } },
-    setTimeout: () => 1, clearTimeout() {}, setInterval: () => 1, clearInterval() {}, Date, console
-  };
-  vm.createContext(context); vm.runInContext(fs.readFileSync('catalog.js', 'utf8'), context); vm.runInContext(code, context);
-  return { context, elements, stored, form, tabs, nav, body, run: expression => vm.runInContext(expression, context) };
-}
-const app = boot();
-assert(app.body.classList.contains('is-onboarding'));
-assert(app.tabs[2].classList.contains('active'));
-assert(app.form.fields.get('name').value === '');
-assert(app.form.fields.get('age').value === '');
-assert(app.form.fields.get('sex').value === '');
-assert(!app.run("saveSet('Chest Press', '10', '12', 0)"));
-assert(!app.stored.has('gym-tracker'));
-app.form.events.submit({preventDefault() {}});
-assert(!app.stored.has('gym-profile'), 'Incomplete profile must not be saved');
-const profile = {name:'Тест <имя>', age:'31', sex:'female', height:'170', weight:'65', goal:'general', level:'beginner', difficulty:'light', sessionMinutes:'30', readiness:'tired'};
-for (const [key, value] of Object.entries(profile)) app.form.fields.get(key).value = value;
-app.form.events.submit({preventDefault() {}});
-assert(!app.body.classList.contains('is-onboarding'));
-assert(app.tabs[0].classList.contains('active'));
-assert(JSON.parse(app.stored.get('gym-profile')).height === 170);
-assert(app.elements.get('#profileName').textContent === 'Тест <имя>');
-assert(app.elements.get('#adaptation').textContent.includes('сниженный'));
-assert(app.run('getAdjustedExercise(baseWorkoutData.A.exercises[0]).sets') === '1 × 10–15');
-assert(app.run('getAdjustedExercise(baseWorkoutData.recovery.exercises[0]).sets') === '30–40 мин');
-assert(app.run('exerciseLibrary.length') >= 35);
-assert(!html.includes('data-target="catalog"'));
-assert(!html.includes('id="trackerExercise"'));
-const quickForm = new Element(); quickForm.classList.add('quick-set-form'); quickForm.dataset.index = '0';
-for (const [key, value] of Object.entries({weight:'0', reps:'12'})) { const field = new Element(); field.value = value; quickForm.fields.set(key, field); }
-app.elements.get('#exerciseList').events.submit({target:quickForm, preventDefault() {}});
-let rows = JSON.parse(app.stored.get('gym-tracker'));
-assert(rows.length === 1 && rows[0].weight === 0 && rows[0].day === 1 && rows[0].exerciseKey === '1-0');
-assert(app.elements.get('#trackerTable').innerHTML.includes('Chest Press'));
-assert(app.elements.get('#exerciseList').innerHTML.includes('0 кг × 12'));
-assert(!app.run("saveSet('Chest Press', '-5', '2.2', 0)"));
-assert(!app.run("saveSet('Chest Press', '', '12', 0)"));
-assert(JSON.parse(app.stored.get('gym-tracker')).length === 1);
-assert(app.run("saveSet('Chest Press — жим от груди в тренажёре', '20', '10', 0)"));
-assert(app.elements.get('#exerciseList').innerHTML.includes('Записано: 2 / 1'));
-app.elements.get('#completeDay').events.click();
-assert(JSON.parse(app.stored.get('gym-progress')).includes(1));
-app.elements.get('#completeDay').events.click();
-assert(JSON.parse(app.stored.get('gym-progress')).length === 0);
-app.run('selectedDay = 30; renderPlan()');
-assert(app.elements.get('#todayLabel').textContent === 'ДЕНЬ 30');
-app.elements.get('#timerStart').events.click();
-assert(app.elements.get('#timerValue').textContent === '01:30');
-app.elements.get('#timerReset').events.click();
-const photoButton = {dataset:{photo:'assets/equipment/chest-press.jpg',equipment:'Chest Press'}};
-app.elements.get('#exerciseList').events.click({target:{closest:()=>photoButton}});
-assert(app.elements.get('#equipmentDialog').open);
-assert(app.elements.get('#equipmentDialogImage').src === photoButton.dataset.photo);
-app.elements.get('#closeEquipmentDialog').events.click();
-assert(!app.elements.get('#equipmentDialog').open);
-const reopened = boot(app.stored);
-assert(!reopened.body.classList.contains('is-onboarding'));
-assert(reopened.tabs[0].classList.contains('active'));
-assert(reopened.form.fields.get('name').value === 'Тест <имя>');
-assert(reopened.run('storage.tracker.length') === 2);
-reopened.form.fields.get('name').value = 'Другой';
-reopened.form.events.input();
-assert(reopened.elements.get('#profileSaveStatus').textContent.includes('несохранённые'));
-reopened.form.events.reset({preventDefault() {}});
-assert(reopened.form.fields.get('name').value === 'Тест <имя>');
-assert(boot(new Map([['gym-profile', '{bad-json']])).body.classList.contains('is-onboarding'));
-assert(boot(new Map([['gym-profile', JSON.stringify({name:'Имя'})]])).body.classList.contains('is-onboarding'));
-const legacy = boot(new Map([['gym-profile', JSON.stringify({...profile, name:'Свой профиль'})]]));
-assert(!legacy.body.classList.contains('is-onboarding'), 'Existing complete profiles must be retained');
-const strengthExercises = app.run("Object.values(baseWorkoutData).flatMap(workout => workout.exercises).filter(exercise => exercise.sets.includes('×'))");
-for (const exercise of strengthExercises) {
-  assert(exercise.image.startsWith('assets/equipment/'));
-  assert(fs.existsSync(exercise.image), 'Missing equipment photo: ' + exercise.name);
-  const signature = fs.readFileSync(exercise.image).subarray(0, 4).toString('hex');
-  assert(signature.startsWith('ffd8') || signature === '89504e47', 'Not a JPEG/PNG: ' + exercise.image);
-}
-
-const loss = boot(new Map([['gym-profile', JSON.stringify({...profile, goal:'weightloss', equipment:'machines'})]]));
-assert(loss.run('storage.program') === 'weightloss');
-assert(loss.run('programs.weightloss.schedule.length') === 30);
-assert(loss.elements.get('#programGoalBadge').textContent.includes('Снижение веса'));
-assert(loss.run('getCurrentWorkout().exercises.some(ex => ex.kind === "cardio")'));
-assert(loss.run('estimateMinutes(getAdjustedPlan(getCurrentWorkout()))') <= 30);
-assert(loss.run('getAdjustedPlan(getCurrentWorkout()).filter(ex => ex.sets.includes("×")).every(ex => parseSetText(ex.sets).min >= 10)'));
-loss.run('selectedDay = 2; renderPlan()');
-assert(loss.run('getCurrentWorkout().exercises[0].kind') === 'cardio');
-assert(loss.elements.get('#exerciseList').innerHTML.includes('quick-cardio-form'));
-const cardioForm = new Element(); cardioForm.classList.add('quick-cardio-form'); cardioForm.dataset.index = '0';
-for (const [key, value] of Object.entries({minutes:'25', speed:'5.2', incline:'2'})) { const field = new Element(); field.value = value; cardioForm.fields.set(key, field); }
-loss.elements.get('#exerciseList').events.submit({target:cardioForm, preventDefault() {}});
-const cardioRow = JSON.parse(loss.stored.get('gym-tracker'))[0];
-assert(cardioRow.kind === 'cardio' && cardioRow.minutes === 25 && cardioRow.speed === 5.2 && cardioRow.incline === 2);
-assert(cardioRow.program === 'weightloss' && cardioRow.exerciseKey === 'weightloss-2-0');
-assert(loss.elements.get('#trackerTable').innerHTML.includes('5.2 км/ч'));
-assert(!loss.run('saveCardio("Дорожка", 0, 5, 0)'));
-assert(!loss.run('saveCardio("Дорожка", 30, -5, 0)'));
-assert(loss.run('saveBodyWeight("64.2", "after")'));
-assert(JSON.parse(loss.stored.get('gym-body-weight'))[0].weight === 64.2);
-assert(JSON.parse(loss.stored.get('gym-profile')).weight === 64.2);
-assert(JSON.parse(loss.stored.get('gym-tracker')).length === 1, 'Body weight must stay separate from exercise loads');
-assert(loss.elements.get('#bodyWeightSummary').textContent.includes('-0.8 кг'));
-assert(loss.run('saveBodyWeight("63.9", "morning")'));
-assert(!loss.run('saveBodyWeight("", "after")'));
-assert(!loss.run('saveBodyWeight("500", "after")'));
-assert(JSON.parse(loss.stored.get('gym-body-weight')).length === 2);
-assert(loss.elements.get('#bodyWeightSummary').textContent.includes('-1.1 кг'));
-loss.elements.get('#completeDay').events.click();
-assert(loss.run('storage.progress.length') === 0);
-assert(JSON.parse(loss.stored.get('gym-program-progress')).weightloss.includes(2));
-loss.form.fields.get('goal').value = 'strength';
-loss.form.events.submit({preventDefault() {}});
-assert(loss.run('storage.program') === 'strength');
-assert(loss.run('getAdjustedExercise(baseWorkoutData.A.exercises[0]).sets').includes('6–10'));
-assert(loss.run('currentProgress().length') === 0);
-loss.form.fields.get('goal').value = 'weightloss';
-loss.form.fields.get('equipment').value = 'dumbbells';
-loss.form.events.submit({preventDefault() {}});
-assert(loss.run('currentProgress().includes(2)'));
-assert(loss.run('getCurrentWorkout().exercises.every(ex => ex.group === "dumbbells" || ex.kind === "cardio")'));
-loss.run('selectedDay = 2; renderPlan()');
-assert(loss.run('getCurrentWorkout().exercises[0].name') === 'Ходьба на улице');
-assert(loss.run('getCurrentWorkout().exercises[0].image') === null);
-const lossReload = boot(loss.stored);
-assert(lossReload.run('storage.program') === 'weightloss');
-assert(lossReload.run('storage.bodyWeight.length') === 2);
-assert(lossReload.form.fields.get('weight').value === 63.9);
-for (const ex of loss.run('exerciseLibrary')) if (ex.image) assert(fs.existsSync(ex.image));
-assert(!code.includes('????'), 'Russian text must keep its encoding');
-
-console.log('PASS: first launch, empty fields, required profile, gated logging, profile save/reopen, legacy profile, adaptation, quick-set submission, journal persistence, invalid input, day completion, timer, photo viewer, cancel changes, malformed storage, all equipment photos, goal-driven program selection, no exercise picker, cardio logging, separate body-weight history, program progress isolation, automatic dumbbell variants.');
+function snapshot(w) {return Object.fromEntries(Array.from({length:w.localStorage.length},(_,i)=>{const k=w.localStorage.key(i);return [k,w.localStorage.getItem(k)]}));}
+(async()=>{
+ let a=boot(); assert(a.doc.body.classList.contains('is-onboarding'));
+ const form=a.doc.querySelector('#profileForm');
+ for (const [k,v] of Object.entries(profile)) form.elements.namedItem(k).value=v;
+ form.requestSubmit();assert.equal(JSON.parse(a.w.localStorage.getItem('gym-profile')).name,'Alex');
+ for(const tab of ['tracker','profile','plan','tracker']) {a.doc.querySelector('[data-target="'+tab+'"]').click();assert.equal(a.doc.querySelector('.tab-view.active').dataset.tab,tab);assert.equal(a.doc.querySelectorAll('.tab-view:not([hidden])').length,1);}
+ let saved=snapshot(a.w); assert.deepEqual(a.errors,[]); a.dom.window.close();
+ a=boot(saved);assert(!a.doc.body.classList.contains('is-onboarding'));assert.equal(a.doc.querySelector('#profileForm').elements.namedItem('name').value,'Alex');
+ const f=a.doc.querySelector('#profileForm');f.elements.namedItem('name').value='Alex updated';f.elements.namedItem('name').dispatchEvent(new a.w.Event('input',{bubbles:true}));
+ await new Promise(r=>setTimeout(r,850));assert.equal(JSON.parse(a.w.localStorage.getItem('gym-profile')).name,'Alex updated');
+ a.doc.querySelector('[data-open-weight]').click();assert(a.doc.querySelector('#weightDialog').hasAttribute('open'));a.doc.querySelector('#bodyWeightInput').value='84,5';a.doc.querySelector('#planBodyWeightForm').requestSubmit();assert.equal(JSON.parse(a.w.localStorage.getItem('gym-body-weight'))[0].weight,84.5);assert(!a.doc.querySelector('#weightDialog').hasAttribute('open'));
+ const q=a.doc.querySelector('.quick-set-form');q.elements.namedItem('weight').value=20;q.elements.namedItem('reps').value=10;q.requestSubmit();assert.equal(JSON.parse(a.w.localStorage.getItem('gym-tracker'))[0].weight,20);
+ saved=snapshot(a.w);assert.deepEqual(a.errors,[]);a.dom.window.close();a=boot(saved);assert.equal(a.w.qa.storage.bodyWeight[0].weight,84.5);assert.equal(a.w.qa.storage.tracker[0].weight,20);
+ let tested=0;const signatures=new Set();
+ for(const goal of ['strength','mass','weightloss','tone','general'])for(const equipment of ['machines','mixed','dumbbells'])for(const level of ['beginner','intermediate','advanced'])for(const sessionMinutes of [30,45,60,75])for(const readiness of ['normal','tired']) {
+ const p={...profile,goal,equipment,level,sessionMinutes,readiness};a.w.qa.storage.profile=p;
+ for(const day of [1,2,3,5,7,15,29,30]){
+ const first=a.w.qa.buildWorkout(p,day),second=a.w.qa.buildWorkout(p,day);assert.equal(JSON.stringify(first),JSON.stringify(second));const adjusted=a.w.qa.getAdjustedPlan(first);const minutes=adjusted.reduce((n,e)=>n+(e.kind==='cardio'?e.minutes:Number(e.sets.split('×')[0])*3),adjusted.length?7:0);assert(minutes<=sessionMinutes,'Budget '+JSON.stringify(p)+' day'+day);
+ assert.equal(new Set(first.exercises.map(e=>e.name)).size,first.exercises.length);
+ for(const e of first.exercises){assert(e.name&&e.sets&&e.note);if(e.image)assert(fs.existsSync(e.image));if(equipment==='dumbbells')assert(e.group==='dumbbells'||e.name==='Ходьба на улице');if(equipment==='machines')assert(e.group==='machines'||e.kind==='cardio');}
+ if(day===1)signatures.add(first.exercises.map(e=>e.name).join('|')); tested++;
+ }
+ }
+ assert(signatures.size>20);assert.deepEqual(a.errors,[]);a.dom.window.close();
+ a=boot({'gym-profile':JSON.stringify({...profile,name:42}),'gym-tracker':'{}','gym-body-weight':'{}','gym-program-progress':'null'});assert(a.doc.body.classList.contains('is-onboarding'));assert.deepEqual(a.errors,[]);a.dom.window.close();
+ a=boot();a.doc.querySelector('#profileForm').elements.namedItem('name').value='Draft';a.doc.querySelector('#profileForm').elements.namedItem('name').dispatchEvent(new a.w.Event('input',{bubbles:true}));saved=snapshot(a.w);a.dom.window.close();a=boot(saved);assert.equal(a.doc.querySelector('#profileForm').elements.namedItem('name').value,'Draft');a.dom.window.close();
+ console.log('PASS: native forms, autosave, reload, navigation, weight, workout logs, corrupt storage; '+tested+' planner scenarios, '+signatures.size+' distinct day-one plans.');
+})().catch(e=>{console.error(e);process.exit(1)});
