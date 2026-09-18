@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#eff5ee" />
+  <title>Форма — тренировки</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">↗</span><span>ФОРМА</span></div>
+      <button class="icon-button" id="openProfile" aria-label="Открыть профиль">Мой профиль <span id="avatar">А</span></button>
+    </header>
+
+
+
+
+
+    <div class="tab-view active" data-tab="plan">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">ТВОЙ РИТМ. ТВОЙ ПРОГРЕСС.</p>
+        <h1 id="heroTitle">Стань сильнее<br><em>за 30 дней</em></h1>
+        <p class="hero-copy" id="heroSubtitle">Тренажёры, спокойный темп и нормальное восстановление.</p>
+      </div>
+      <div class="hero-orb" aria-hidden="true"><span>30<br><small>ДНЕЙ</small></span></div>
+    </section>
+<div class="program-label"><span>МОЯ ПРОГРАММА</span><span>01 / СИЛОВАЯ БАЗА</span></div><p class="plan-intro">30 дней, чтобы стать сильнее.</p><div class="adaptation" id="adaptation"></div>
+      <section class="section-heading">
+        <div>
+          <p class="eyebrow">СЕГОДНЯ · <span id="todayLabel">ДЕНЬ 1</span></p>
+          <h2 id="workoutTitle">Тренировка A</h2>
+        </div>
+        <span class="duration" id="durationBadge">45 мин</span>
+      </section>
+
+      <section class="day-picker" aria-label="Выбор дня программы">
+        <button class="day-arrow" id="prevDay" aria-label="Предыдущий день">‹</button>
+        <div class="days" id="days"></div>
+        <button class="day-arrow" id="nextDay" aria-label="Следующий день">›</button>
+      </section>
+
+      <section class="progress-card">
+        <div class="progress-info">
+          <span>ПРОГРЕСС</span>
+          <button class="complete-day" id="completeDay">Завершить день</button>
+          <strong id="progressText">0 / 30</strong>
+        </div>
+        <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      </section>
+
+      <section class="section-heading exercise-heading">
+        <div>
+          <p class="eyebrow">ПЛАН НА ДЕНЬ</p>
+          <h2>Твой план на сегодня</h2>
+        </div>
+        <span class="count" id="exerciseCount">6 упражнений</span>
+      </section>
+
+      <section class="rest-timer"><div><p class="eyebrow">МЕЖДУ ПОДХОДАМИ</p><strong id="timerValue">01:30</strong></div><button id="timerStart">Начать отдых</button><button id="timerReset" aria-label="Сбросить таймер">Сброс</button></section><section class="exercise-list" id="exerciseList"></section>
+
+      <section class="tip-card">
+        <div class="tip-icon">✦</div>
+        <div>
+          <strong>Подсказка</strong>
+          <p id="tipText">Начинай с лёгкого веса. Последние 2 повтора должны быть честно тяжёлыми, но техника не ломается.</p>
+        </div>
+      </section>
+    <section class="weekly-note">
+      <p class="eyebrow">БАЛАНС НЕДЕЛИ</p>
+      <div class="balance-row"><span>🏋️ 3 силовых</span><span>🏃 1 лёгкий бег</span><span>🏊 1 бассейн</span><span>💤 1 отдых</span></div>
+    </section>
+    </div>
+
+    <div class="tab-view" data-tab="tracker">
+      <section class="tracker-block">
+        <div class="tracker-header">
+          <div>
+            <p class="eyebrow">ТРИКЕР</p>
+            <h3>Каждый подход имеет значение</h3><p class="page-copy">Записывай нагрузку и следи за своими результатами.</p><div class="tracker-summary" id="trackerSummary"></div>
+          </div>
+        </div>
+
+        <div class="tracker-form">
+          <label>
+            Упражнение
+            <select id="trackerExercise">
+              <option value="Chest Press — жим от груди в тренажёре">Chest Press</option>
+              <option value="Lat Pulldown — тяга верхнего блока">Lat Pulldown</option>
+              <option value="Leg Press — жим ногами">Leg Press</option>
+              <option value="Incline Dumbbell Press — жим на наклонной">Incline Press</option>
+              <option value="Seated Cable Row — горизонтальная тяга блока">Seated Row</option>
+              <option value="Cable Crunch — скручивания на верхнем блоке">Cable Crunch</option>
+            </select>
+          </label>
+          <div class="tracker-inline">
+            <label>
+              Вес
+              <input id="trackerWeight" type="number" min="0" step="1" placeholder="30" />
+            </label>
+            <label>
+              Повторы
+              <input id="trackerReps" type="number" min="1" step="1" placeholder="10" />
+            </label>
+          </div>
+          <button id="saveTracker" class="save-button">Сохранить</button>
+        </div>
+
+        <div class="tracker-table-wrap">
+          <table class="tracker-table">
+            <thead>
+              <tr>
+                <th>Дата</th>
+                <th>Упражнение</th>
+                <th>Вес</th>
+                <th>Повторы</th>
+                <th>След. вес</th>
+              </tr>
+            </thead>
+            <tbody id="trackerTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <div class="tab-view" data-tab="profile">
+      <section class="profile-block" aria-labelledby="profileTitle">
+        <header class="profile-heading"><p class="eyebrow">ЛИЧНОЕ ПРОСТРАНСТВО</p><h1 id="profileTitle">Твой профиль</h1><p class="page-copy">Расскажи о себе. Подстроим твою программу под твой ритм.</p></header>
+        <div class="profile-overview"><div class="profile-avatar" id="profileAvatar" aria-hidden="true">А</div><div class="profile-identity"><h2 id="profileName">Артём</h2><p id="profileGoal">Сила и мышцы</p></div><span class="local-badge">Хранится на устройстве</span></div>
+    <section class="stats-grid" aria-label="Профиль пользователя">
+      <div class="stat"><span>ВОЗРАСТ</span><strong id="statAge">26 <small>лет</small></strong></div>
+      <div class="stat"><span>ВЕС</span><strong id="statWeight">55–58 <small>кг</small></strong></div>
+      <div class="stat"><span>УРОВЕНЬ</span><strong id="statLevel">NORM</strong></div>
+    </section>
+        <form id="profileForm" class="profile-form">
+          <section class="profile-section" aria-labelledby="personalTitle">
+            <div class="form-section-heading"><span class="section-step">01</span><div><h2 id="personalTitle">О тебе</h2><p>Основные данные твоего профиля</p></div></div>
+            <label class="profile-field"><span>Как тебя зовут</span><input name="name" maxlength="50" required type="text" autocomplete="given-name" placeholder="Твоё имя"></label>
+            <fieldset class="choice-field"><legend>Пол</legend><div class="choice-grid sex-choices"><label class="choice"><input type="radio" name="sex" value="male" required><span class="choice-surface"><strong>Мужской</strong></span></label><label class="choice"><input type="radio" name="sex" value="female" required><span class="choice-surface"><strong>Женский</strong></span></label></div></fieldset>
+            <div class="body-fields"><label class="profile-field"><span>Возраст, лет</span><span class="input-shell"><input name="age" type="number" inputmode="numeric" required min="16" max="80" step="1" placeholder="26"><span class="input-unit" aria-hidden="true">лет</span></span></label><label class="profile-field"><span>Рост, см</span><span class="input-shell"><input name="height" type="number" inputmode="numeric" required min="140" max="220" step="1" placeholder="178"><span class="input-unit" aria-hidden="true">см</span></span></label><label class="profile-field"><span>Вес, кг</span><span class="input-shell"><input name="weight" type="number" inputmode="decimal" required min="30" max="200" step="0.1" placeholder="56"><span class="input-unit" aria-hidden="true">кг</span></span></label></div>
+          </section>
+          <section class="profile-section" aria-labelledby="goalsTitle">
+            <div class="form-section-heading"><span class="section-step">02</span><div><h2 id="goalsTitle">Твоя цель</h2><p>Выбери то, что сейчас важнее для тебя</p></div></div>
+            <fieldset class="choice-field"><legend class="sr-only">Цель тренировок</legend><div class="choice-grid goal-choices"><label class="choice"><input type="radio" name="goal" value="mass" required><span class="choice-surface"><strong>Набрать массу</strong><small>Мышцы и уверенный прогресс</small></span></label><label class="choice"><input type="radio" name="goal" value="strength" required><span class="choice-surface"><strong>Стать сильнее</strong><small>Сила и мышечная масса</small></span></label><label class="choice"><input type="radio" name="goal" value="tone" required><span class="choice-surface"><strong>Быть в тонусе</strong><small>Рельеф и выносливость</small></span></label><label class="choice"><input type="radio" name="goal" value="general" required><span class="choice-surface"><strong>Чувствовать себя лучше</strong><small>Движение и общее здоровье</small></span></label></div></fieldset>
+            <div class="two-col"><label class="profile-field"><span>Опыт тренировок</span><select name="level"><option value="beginner">Новичок</option><option value="intermediate">Есть опыт</option><option value="advanced">Продвинутый</option></select></label><label class="profile-field"><span>Нагрузка</span><select name="difficulty"><option value="light">Лёгкая</option><option value="normal">Умеренная</option><option value="hard">Интенсивная</option></select></label></div>
+          </section>
+          <section class="profile-section" aria-labelledby="rhythmTitle">
+            <div class="form-section-heading"><span class="section-step">03</span><div><h2 id="rhythmTitle">Твой ритм</h2><p>Удобная длительность и состояние на сегодня</p></div></div>
+            <fieldset class="choice-field"><legend>Время на тренировку</legend><div class="choice-grid duration-choices"><label class="choice"><input type="radio" name="sessionMinutes" value="30" required><span class="choice-surface"><strong>30 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="45" required><span class="choice-surface"><strong>45 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="60" required><span class="choice-surface"><strong>60 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="75" required><span class="choice-surface"><strong>75 мин</strong></span></label></div></fieldset>
+            <label class="profile-field"><span>Как ты себя чувствуешь</span><select name="readiness"><option value="good">Полон сил — готов тренироваться</option><option value="normal">Обычное самочувствие</option><option value="tired">Устал — нужна лёгкая тренировка</option></select></label>
+            <p class="profile-help">Цель, опыт, время и самочувствие меняют подходы и повторы. Рабочую нагрузку подбираем по твоим записям.</p>
+          </section>
+          <footer class="profile-actions"><div><strong id="profileSaveStatus" role="status" aria-live="polite">Все изменения сохранены</strong><p>Твой план обновится после сохранения</p></div><div class="profile-action-buttons"><button type="reset" class="discard-button">Отменить</button><button type="submit" class="save-button">Сохранить изменения</button></div></footer>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Основная навигация">
+    <button class="nav-item active" data-target="plan"><span>▦</span>План</button>
+    <button class="nav-item" data-target="tracker"><span>◷</span>Прогресс</button>
+    <button class="nav-item" data-target="profile"><span>◎</span>Профиль</button>
+  </nav>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
+</body>
+</html>
