@@ -30,7 +30,7 @@
       </div>
       <div class="hero-orb" aria-hidden="true"><span>30<br><small>ДНЕЙ</small></span></div>
     </section>
-<div class="program-label"><span>МОЯ ПРОГРАММА</span><span>01 / СИЛОВАЯ БАЗА</span></div><p class="plan-intro">30 дней, чтобы стать сильнее.</p><div class="adaptation" id="adaptation"></div>
+<div class="program-label"><span>МОЯ ПРОГРАММА</span><span id="programLabel">01 / СИЛОВАЯ БАЗА</span></div><p class="plan-intro" id="programIntro">30 дней, чтобы стать сильнее.</p><div class="program-switch"><span class="program-goal-badge" id="programGoalBadge">По твоей цели</span><p id="programDescription"></p><button id="editTrainingGoal" class="text-button" type="button">Изменить цель в профиле</button></div><div class="adaptation" id="adaptation"></div>
       <section class="section-heading">
         <div>
           <p class="eyebrow">СЕГОДНЯ · <span id="todayLabel">ДЕНЬ 1</span></p>
@@ -64,6 +64,7 @@
 
       <p class="logging-help">Галочка — упражнение выполнено. «Записать подход» — сохранить вес и повторы в журнал. Запись необязательна.</p><p class="equipment-help">На фото — пример нужного оборудования. Модель в твоём зале может отличаться.</p><section class="rest-timer"><div><p class="eyebrow">МЕЖДУ ПОДХОДАМИ</p><strong id="timerValue">01:30</strong></div><button id="timerStart">Начать отдых</button><button id="timerReset" aria-label="Сбросить таймер">Сброс</button></section><section class="exercise-list" id="exerciseList"></section>
 
+<section class="post-workout-card" id="postWorkoutCard"><p class="eyebrow">ПОСЛЕ ТРЕНИРОВКИ</p><h2>Как меняется твой вес?</h2><p class="page-copy">Можно записать вес тела после занятия. Для сравнения лучше одинаковые условия, например утром.</p><form id="planBodyWeightForm" class="body-weight-form"><label>Вес тела, кг<input name="bodyWeight" type="number" required min="30" max="200" step="0.1" inputmode="decimal" placeholder="Например, 72.5"></label><label>Условия замера<select name="context"><option value="after">После тренировки</option><option value="morning">Утром</option><option value="other">Другой замер</option></select></label><button class="save-button" type="submit">Сохранить вес</button></form><p id="planWeightStatus" class="weight-status" role="status"></p></section>
       <section class="tip-card">
         <div class="tip-icon">✦</div>
         <div>
@@ -73,7 +74,7 @@
       </section>
     <section class="weekly-note">
       <p class="eyebrow">БАЛАНС НЕДЕЛИ</p>
-      <div class="balance-row"><span>🏋️ 3 силовых</span><span>🏃 1 лёгкий бег</span><span>🏊 1 бассейн</span><span>💤 1 отдых</span></div>
+      <div class="balance-row" id="weeklyBalance"><span>🏋️ 3 силовых</span><span>🏃 1 лёгкий бег</span><span>🏊 1 бассейн</span><span>💤 1 отдых</span></div>
     </section>
     </div>
 
@@ -86,32 +87,7 @@
           </div>
         </div>
 
-        <details class="manual-entry"><summary>Добавить подход вручную</summary><div class="tracker-form">
-          <label>
-            Упражнение
-            <select id="trackerExercise">
-              <option value="Chest Press — жим от груди в тренажёре">Chest Press</option>
-              <option value="Lat Pulldown — тяга верхнего блока">Lat Pulldown</option>
-              <option value="Leg Press — жим ногами">Leg Press</option>
-              <option value="Incline Dumbbell Press — жим на наклонной">Incline Press</option>
-              <option value="Seated Cable Row — горизонтальная тяга блока">Seated Row</option>
-              <option value="Cable Crunch — скручивания на верхнем блоке">Cable Crunch</option>
-            </select>
-          </label>
-          <div class="tracker-inline">
-            <label>
-              Вес
-              <input id="trackerWeight" type="number" min="0" max="1000" step="0.1" placeholder="30" />
-            </label>
-            <label>
-              Повторы
-              <input id="trackerReps" type="number" min="1" max="100" step="1" placeholder="10" />
-            </label>
-          </div>
-          <button id="saveTracker" class="save-button">Сохранить</button>
-        </div>
-
-        </details><div class="tracker-table-wrap">
+<section class="body-weight-section"><div class="section-heading"><div><p class="eyebrow">ВЕС ТЕЛА</p><h2>Твоя динамика</h2></div></div><div id="bodyWeightSummary" class="weight-summary"></div><form id="journalBodyWeightForm" class="body-weight-form"><label>Вес тела, кг<input name="bodyWeight" type="number" required min="30" max="200" step="0.1" inputmode="decimal" placeholder="Например, 72.5"></label><label>Условия замера<select name="context"><option value="after">После тренировки</option><option value="morning">Утром</option><option value="other">Другой замер</option></select></label><button class="save-button" type="submit">Сохранить вес</button></form><div class="tracker-table-wrap"><table class="tracker-table weight-table"><thead><tr><th>Дата</th><th>Вес тела</th><th>Условия</th></tr></thead><tbody id="bodyWeightTable"></tbody></table></div><p class="profile-help">Изменения после занятия могут зависеть от жидкости. Смотри на тенденцию за несколько дней, а не на один замер.</p></section><div class="tracker-table-wrap">
           <table class="tracker-table">
             <thead>
               <tr>
@@ -146,12 +122,12 @@
           </section>
           <section class="profile-section" aria-labelledby="goalsTitle">
             <div class="form-section-heading"><span class="section-step">02</span><div><h2 id="goalsTitle">Твоя цель</h2><p>Выбери то, что сейчас важнее для тебя</p></div></div>
-            <fieldset class="choice-field"><legend class="sr-only">Цель тренировок</legend><div class="choice-grid goal-choices"><label class="choice"><input type="radio" name="goal" value="mass" required><span class="choice-surface"><strong>Набрать массу</strong><small>Мышцы и уверенный прогресс</small></span></label><label class="choice"><input type="radio" name="goal" value="strength" required><span class="choice-surface"><strong>Стать сильнее</strong><small>Сила и мышечная масса</small></span></label><label class="choice"><input type="radio" name="goal" value="tone" required><span class="choice-surface"><strong>Быть в тонусе</strong><small>Рельеф и выносливость</small></span></label><label class="choice"><input type="radio" name="goal" value="general" required><span class="choice-surface"><strong>Чувствовать себя лучше</strong><small>Движение и общее здоровье</small></span></label></div></fieldset>
+            <fieldset class="choice-field"><legend class="sr-only">Цель тренировок</legend><div class="choice-grid goal-choices"><label class="choice"><input type="radio" name="goal" value="weightloss" required><span class="choice-surface"><strong>Снизить вес</strong><small>Силовые, кардио и регулярность</small></span></label><label class="choice"><input type="radio" name="goal" value="mass" required><span class="choice-surface"><strong>Набрать массу</strong><small>Мышцы и уверенный прогресс</small></span></label><label class="choice"><input type="radio" name="goal" value="strength" required><span class="choice-surface"><strong>Стать сильнее</strong><small>Сила и мышечная масса</small></span></label><label class="choice"><input type="radio" name="goal" value="tone" required><span class="choice-surface"><strong>Быть в тонусе</strong><small>Рельеф и выносливость</small></span></label><label class="choice"><input type="radio" name="goal" value="general" required><span class="choice-surface"><strong>Чувствовать себя лучше</strong><small>Движение и общее здоровье</small></span></label></div></fieldset>
             <div class="two-col"><label class="profile-field"><span>Опыт тренировок</span><select name="level"><option value="beginner">Новичок</option><option value="intermediate">Есть опыт</option><option value="advanced">Продвинутый</option></select></label><label class="profile-field"><span>Нагрузка</span><select name="difficulty"><option value="light">Лёгкая</option><option value="normal">Умеренная</option><option value="hard">Интенсивная</option></select></label></div>
           </section>
           <section class="profile-section" aria-labelledby="rhythmTitle">
             <div class="form-section-heading"><span class="section-step">03</span><div><h2 id="rhythmTitle">Твой ритм</h2><p>Удобная длительность и состояние на сегодня</p></div></div>
-            <fieldset class="choice-field"><legend>Время на тренировку</legend><div class="choice-grid duration-choices"><label class="choice"><input type="radio" name="sessionMinutes" value="30" required><span class="choice-surface"><strong>30 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="45" required><span class="choice-surface"><strong>45 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="60" required><span class="choice-surface"><strong>60 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="75" required><span class="choice-surface"><strong>75 мин</strong></span></label></div></fieldset>
+            <label class="profile-field"><span>Какое оборудование доступно</span><select name="equipment"><option value="machines">Зал с тренажёрами</option><option value="mixed">Тренажёры и гантели</option><option value="dumbbells">Только гантели</option></select></label><p class="profile-help">Упражнения подбираются автоматически под цель и доступное оборудование.</p><fieldset class="choice-field"><legend>Время на тренировку</legend><div class="choice-grid duration-choices"><label class="choice"><input type="radio" name="sessionMinutes" value="30" required><span class="choice-surface"><strong>30 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="45" required><span class="choice-surface"><strong>45 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="60" required><span class="choice-surface"><strong>60 мин</strong></span></label><label class="choice"><input type="radio" name="sessionMinutes" value="75" required><span class="choice-surface"><strong>75 мин</strong></span></label></div></fieldset>
             <label class="profile-field"><span>Как ты себя чувствуешь</span><select name="readiness"><option value="good">Полон сил — готов тренироваться</option><option value="normal">Обычное самочувствие</option><option value="tired">Устал — нужна лёгкая тренировка</option></select></label>
             <p class="profile-help">Цель, опыт, время и самочувствие меняют подходы и повторы. Рабочую нагрузку подбираем по твоим записям.</p>
           </section>
@@ -168,6 +144,6 @@
   </nav>
 
   <dialog id="equipmentDialog" class="equipment-dialog" aria-labelledby="equipmentDialogTitle"><button id="closeEquipmentDialog" type="button">Закрыть</button><h2 id="equipmentDialogTitle">Фото оборудования</h2><img id="equipmentDialogImage" alt=""><p>Пример оборудования. Модель в твоём зале может отличаться.</p></dialog>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div><script src="app.js"></script>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div><script src="catalog.js"></script><script src="app.js"></script>
 </body>
 </html>

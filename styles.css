@@ -632,3 +632,24 @@ button:hover { filter:brightness(.97); }
 
 .is-onboarding .tab-view[data-tab="plan"], .is-onboarding .tab-view[data-tab="tracker"] { display:none; }
 .is-onboarding .tab-view[data-tab="profile"] { display:block; }
+/* Goal-driven programs and post-workout weigh-ins */
+.program-switch { display:grid; gap:10px; padding:20px; border:1px solid var(--line); border-radius:18px; background:white; margin:16px 0; }
+.program-switch p { font-size:12px; line-height:1.8; color:var(--muted); margin:0; }
+.program-goal-badge { width:fit-content; font-size:11px; font-weight:800; padding:7px 11px; background:var(--soft); border-radius:20px; }
+.text-button { justify-self:start; min-height:40px; padding:8px 0; color:#56713f; background:transparent; font-size:12px; font-weight:700; text-decoration:underline; text-underline-offset:4px; }
+.post-workout-card,.body-weight-section { margin-top:24px; padding:24px; border:1px solid var(--line); border-radius:20px; background:white; }
+.post-workout-card h2 { font-size:21px; letter-spacing:-.04em; margin-bottom:10px; }
+.body-weight-section { margin:0 0 24px; }
+.body-weight-form { display:grid; grid-template-columns:1fr 1fr auto; align-items:end; gap:12px; }
+.body-weight-form label,.quick-cardio-form label { display:grid; gap:8px; color:var(--muted); font-size:11px; font-weight:700; }
+.body-weight-form input,.body-weight-form select,.quick-cardio-form input { width:100%; min-width:0; min-height:48px; padding:12px; border:1px solid var(--line); border-radius:10px; background:#f8faf5; color:var(--ink); font-size:14px; }
+.body-weight-form .save-button { font-size:12px; padding:12px 16px; }
+.weight-summary { background:var(--soft); padding:16px; border-radius:12px; font-size:13px; line-height:1.7; margin-bottom:20px; }
+.weight-status { margin:12px 0 0; font-size:12px; color:var(--muted); line-height:1.7; }
+.weight-table { min-width:300px; }
+.body-weight-section .profile-help { margin-top:16px; }
+.quick-cardio-form { display:grid; gap:12px; padding-top:12px; }
+.quick-cardio-form .save-button { font-size:12px; }
+.empty-state { padding:24px; background:white; border:1px solid var(--line); border-radius:16px; color:var(--muted); font-size:14px; line-height:1.8; grid-column:1 / -1; }
+@media(max-width:650px) { .body-weight-form { grid-template-columns:1fr 1fr; } .body-weight-form .save-button { grid-column:1 / -1; } }
+@media(max-width:540px) { .post-workout-card,.body-weight-section { padding:20px; } .body-weight-form { grid-template-columns:1fr; } .body-weight-form input,.body-weight-form select,.quick-cardio-form input { font-size:16px; } .program-switch { padding:18px; } }

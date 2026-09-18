@@ -31,7 +31,7 @@ function boot(stored = new Map()) {
     FormData: class { constructor(form) { this.form = form; } get(key) { return this.form.fields.get(key)?.value ?? null; } },
     setTimeout: () => 1, clearTimeout() {}, setInterval: () => 1, clearInterval() {}, Date, console
   };
-  vm.createContext(context); vm.runInContext(code, context);
+  vm.createContext(context); vm.runInContext(fs.readFileSync('catalog.js', 'utf8'), context); vm.runInContext(code, context);
   return { context, elements, stored, form, tabs, nav, body, run: expression => vm.runInContext(expression, context) };
 }
 const app = boot();
@@ -54,7 +54,9 @@ assert(app.elements.get('#profileName').textContent === 'Тест <имя>');
 assert(app.elements.get('#adaptation').textContent.includes('сниженный'));
 assert(app.run('getAdjustedExercise(baseWorkoutData.A.exercises[0]).sets') === '1 × 10–15');
 assert(app.run('getAdjustedExercise(baseWorkoutData.recovery.exercises[0]).sets') === '30–40 мин');
-assert(app.elements.get('#trackerExercise').children.length > 6);
+assert(app.run('exerciseLibrary.length') >= 35);
+assert(!html.includes('data-target="catalog"'));
+assert(!html.includes('id="trackerExercise"'));
 const quickForm = new Element(); quickForm.classList.add('quick-set-form'); quickForm.dataset.index = '0';
 for (const [key, value] of Object.entries({weight:'0', reps:'12'})) { const field = new Element(); field.value = value; quickForm.fields.set(key, field); }
 app.elements.get('#exerciseList').events.submit({target:quickForm, preventDefault() {}});
@@ -103,4 +105,57 @@ for (const exercise of strengthExercises) {
   const signature = fs.readFileSync(exercise.image).subarray(0, 4).toString('hex');
   assert(signature.startsWith('ffd8') || signature === '89504e47', 'Not a JPEG/PNG: ' + exercise.image);
 }
-console.log('PASS: first launch, empty fields, required profile, gated logging, profile save/reopen, legacy profile, adaptation, quick-set submission, journal persistence, invalid input, day completion, timer, photo viewer, cancel changes, malformed storage, all equipment photos.');
+
+const loss = boot(new Map([['gym-profile', JSON.stringify({...profile, goal:'weightloss', equipment:'machines'})]]));
+assert(loss.run('storage.program') === 'weightloss');
+assert(loss.run('programs.weightloss.schedule.length') === 30);
+assert(loss.elements.get('#programGoalBadge').textContent.includes('Снижение веса'));
+assert(loss.run('getCurrentWorkout().exercises.some(ex => ex.kind === "cardio")'));
+assert(loss.run('estimateMinutes(getAdjustedPlan(getCurrentWorkout()))') <= 30);
+assert(loss.run('getAdjustedPlan(getCurrentWorkout()).filter(ex => ex.sets.includes("×")).every(ex => parseSetText(ex.sets).min >= 10)'));
+loss.run('selectedDay = 2; renderPlan()');
+assert(loss.run('getCurrentWorkout().exercises[0].kind') === 'cardio');
+assert(loss.elements.get('#exerciseList').innerHTML.includes('quick-cardio-form'));
+const cardioForm = new Element(); cardioForm.classList.add('quick-cardio-form'); cardioForm.dataset.index = '0';
+for (const [key, value] of Object.entries({minutes:'25', speed:'5.2', incline:'2'})) { const field = new Element(); field.value = value; cardioForm.fields.set(key, field); }
+loss.elements.get('#exerciseList').events.submit({target:cardioForm, preventDefault() {}});
+const cardioRow = JSON.parse(loss.stored.get('gym-tracker'))[0];
+assert(cardioRow.kind === 'cardio' && cardioRow.minutes === 25 && cardioRow.speed === 5.2 && cardioRow.incline === 2);
+assert(cardioRow.program === 'weightloss' && cardioRow.exerciseKey === 'weightloss-2-0');
+assert(loss.elements.get('#trackerTable').innerHTML.includes('5.2 км/ч'));
+assert(!loss.run('saveCardio("Дорожка", 0, 5, 0)'));
+assert(!loss.run('saveCardio("Дорожка", 30, -5, 0)'));
+assert(loss.run('saveBodyWeight("64.2", "after")'));
+assert(JSON.parse(loss.stored.get('gym-body-weight'))[0].weight === 64.2);
+assert(JSON.parse(loss.stored.get('gym-profile')).weight === 64.2);
+assert(JSON.parse(loss.stored.get('gym-tracker')).length === 1, 'Body weight must stay separate from exercise loads');
+assert(loss.elements.get('#bodyWeightSummary').textContent.includes('-0.8 кг'));
+assert(loss.run('saveBodyWeight("63.9", "morning")'));
+assert(!loss.run('saveBodyWeight("", "after")'));
+assert(!loss.run('saveBodyWeight("500", "after")'));
+assert(JSON.parse(loss.stored.get('gym-body-weight')).length === 2);
+assert(loss.elements.get('#bodyWeightSummary').textContent.includes('-1.1 кг'));
+loss.elements.get('#completeDay').events.click();
+assert(loss.run('storage.progress.length') === 0);
+assert(JSON.parse(loss.stored.get('gym-program-progress')).weightloss.includes(2));
+loss.form.fields.get('goal').value = 'strength';
+loss.form.events.submit({preventDefault() {}});
+assert(loss.run('storage.program') === 'strength');
+assert(loss.run('getAdjustedExercise(baseWorkoutData.A.exercises[0]).sets').includes('6–10'));
+assert(loss.run('currentProgress().length') === 0);
+loss.form.fields.get('goal').value = 'weightloss';
+loss.form.fields.get('equipment').value = 'dumbbells';
+loss.form.events.submit({preventDefault() {}});
+assert(loss.run('currentProgress().includes(2)'));
+assert(loss.run('getCurrentWorkout().exercises.every(ex => ex.group === "dumbbells" || ex.kind === "cardio")'));
+loss.run('selectedDay = 2; renderPlan()');
+assert(loss.run('getCurrentWorkout().exercises[0].name') === 'Ходьба на улице');
+assert(loss.run('getCurrentWorkout().exercises[0].image') === null);
+const lossReload = boot(loss.stored);
+assert(lossReload.run('storage.program') === 'weightloss');
+assert(lossReload.run('storage.bodyWeight.length') === 2);
+assert(lossReload.form.fields.get('weight').value === 63.9);
+for (const ex of loss.run('exerciseLibrary')) if (ex.image) assert(fs.existsSync(ex.image));
+assert(!code.includes('????'), 'Russian text must keep its encoding');
+
+console.log('PASS: first launch, empty fields, required profile, gated logging, profile save/reopen, legacy profile, adaptation, quick-set submission, journal persistence, invalid input, day completion, timer, photo viewer, cancel changes, malformed storage, all equipment photos, goal-driven program selection, no exercise picker, cardio logging, separate body-weight history, program progress isolation, automatic dumbbell variants.');

@@ -1,6 +1,6 @@
 # Фото оборудования
 
-Реальные фотографии из каталогов Body-Solid и Life Fitness. Изображения показывают примеры оборудования; модели в вашем зале могут отличаться. Для наклонного жима показана скамья, для молотковых сгибаний — гантели. Блочная колонна используется для трицепса и скручиваний; тренажёр S2LAT — для верхней и горизонтальной тяги.
+18 реальных фото из каталогов производителей. Это примеры оборудования, а не демонстрация техники упражнения. Модели в вашем зале могут отличаться. Фото скамьи и гантелей используются для соответствующих упражнений; одна блочная колонна может использоваться в разных движениях.
 
 - Series 2 Chest Press Machine: https://bodysolid.com/products/single-dual-use-fitness-machines/
 - Body-Solid Heavy Duty Flat-Incline-Decline Bench: https://bodysolid.com/body-solid-heavy-duty-flat-incline-decline-bench
@@ -17,5 +17,8 @@
 - Body-Solid Vertical Knee Raise: https://bodysolid.com/products/single-dual-use-fitness-machines/
 - Body-Solid S2LAT: верхняя и горизонтальная тяга: https://bodysolid-europe.com/products/body-solid-pro-club-line-series-ii-lat-pulldown-seated-row-s2lat
 - Life Fitness Insignia Lateral Raise: https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/insignia-series-lateral-raise
+- Endurance Indoor Training Cycle: https://bodysolid.com/endurance-indoor-training-cycle
+- Endurance Fixed-Stride Elliptical: https://bodysolid.com/endurance-elliptical
+- Endurance Commercial Rated Treadmill, T150: https://bodysolid.com/endurance-commercial-treadmill
 
 Исходные URL и локальные имена файлов: sources.json. Фотографии принадлежат производителям; открытая доступность не означает открытую лицензию.

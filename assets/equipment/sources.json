@@ -103,5 +103,26 @@
     "url": "https://www.lifefitness.com/Kentico13CoreBase/media/LFMedia/LifeFitnessImages/MediaSync/427-253-lateral-raise.png?h=630&w=1200",
     "source": "https://www.lifefitness.com/en-eu/catalog/strength-training/selectorized/insignia-series-lateral-raise",
     "file": "assets/equipment/lateral-raise.png"
+  },
+  {
+    "key": "exercise-bike",
+    "source": "https://bodysolid.com/endurance-indoor-training-cycle",
+    "file": "assets/equipment/exercise-bike.jpg",
+    "url": "https://cdn11.bigcommerce.com/s-2v01ommyhe/images/stencil/608x608/products/391/2080/ESB250_DSF1095-1028px__39201.1734992689.jpg?c=1",
+    "title": "Endurance Indoor Training Cycle"
+  },
+  {
+    "key": "elliptical",
+    "source": "https://bodysolid.com/endurance-elliptical",
+    "file": "assets/equipment/elliptical.jpg",
+    "url": "https://cdn11.bigcommerce.com/s-2v01ommyhe/images/stencil/608x608/products/388/2072/E300_DSF0809-1028px__69328.1734992061.jpg?c=1",
+    "title": "Endurance Fixed-Stride Elliptical"
+  },
+  {
+    "key": "treadmill",
+    "source": "https://bodysolid.com/endurance-commercial-treadmill",
+    "file": "assets/equipment/treadmill.jpg",
+    "url": "https://cdn11.bigcommerce.com/s-2v01ommyhe/images/stencil/608x608/products/394/2093/T150_0051-1028px__20979.1759429496.jpg?c=1",
+    "title": "Endurance Commercial Rated Treadmill, T150"
   }
 ]
