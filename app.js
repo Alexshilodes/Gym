@@ -32,7 +32,8 @@ const extraExerciseData = [
   exercises: 'gym-exercises',
   program: 'gym-program',
   programProgress: 'gym-program-progress',
-  bodyWeight: 'gym-body-weight'
+  bodyWeight: 'gym-body-weight',
+  activeWorkout: 'gym-active-workout'
 };
 
 const defaultProfile = {
@@ -119,7 +120,8 @@ const storage = {
   exercises: readStored(STORAGE_KEYS.exercises, {}),
   program: readStored(STORAGE_KEYS.program, 'strength'),
   programProgress: readStored(STORAGE_KEYS.programProgress, {weightloss: []}),
-  bodyWeight: readStored(STORAGE_KEYS.bodyWeight, [])
+  bodyWeight: readStored(STORAGE_KEYS.bodyWeight, []),
+  activeWorkout: readStored(STORAGE_KEYS.activeWorkout, null)
 };
 
 storage.profile.sessionMinutes = Number(storage.profile.sessionMinutes) || 60;
@@ -355,6 +357,22 @@ function fillProfileForm() {
   });
 }
 
+function roundGymWeight(value) { return Math.max(0, Math.round(value / 2.5) * 2.5); }
+function recommendNextWeight(exercise, weight, reps, effort) {
+ const plan = getAdjustedExercise(exercise), range = parseSetText(plan.sets), current = Number(weight);
+ if (!Number.isFinite(current) || current === 0) return current || 0;
+ if (effort === 'hard') return Math.max(0, Math.min(current - 2.5, roundGymWeight(current * 0.95)));
+ if (effort === 'easy' || (effort === 'normal' && Number(reps) >= range.max)) return Math.max(current + 2.5, roundGymWeight(current * 1.05));
+ return current;
+}
+function previousSetFor(name) { return storage.tracker.filter(row => row.kind !== 'cardio' && exerciseId(row.exercise) === exerciseId(name)).slice(-1)[0]; }
+function recommendationText(exercise) {
+ const last = previousSetFor(exercise.name); if (!last) return 'Начни с комфортного веса и оставь запас 2–3 повтора';
+ const next = Number.isFinite(Number(last.nextWeight)) ? Number(last.nextWeight) : Number(last.weight);
+ const reason = last.effort === 'easy' ? 'прошлый подход был лёгким' : last.effort === 'hard' ? 'прошлый подход был тяжёлым' : next > Number(last.weight) ? 'выполнен верх диапазона' : 'сохраняем рабочий вес';
+ return 'Рекомендация: ' + next + ' кг · ' + reason;
+}
+
 function renderPlan() {
   const workout = getCurrentWorkout();
   const adjusted = getAdjustedPlan(workout);
@@ -364,15 +382,15 @@ function renderPlan() {
     const key = exerciseKey(index);
     const done = Boolean(storage.exercises[key]);
     const logged = storage.tracker.filter(row => row.exerciseKey === key && exerciseId(row.exercise) === exerciseId(exercise.name)).length;
-    const previous = storage.tracker.filter(row => exerciseId(row.exercise) === exerciseId(exercise.name)).slice(-1)[0];
+    const previous = previousSetFor(exercise.name);
     const strength = exercise.sets.includes('×');
     const image = exercise.image ? '<button class="equipment-photo" type="button" data-photo="' + escapeHtml(exercise.image) + '" data-equipment="' + escapeHtml(exercise.equipment) + '" aria-label="Увеличить фото: ' + escapeHtml(exercise.equipment) + '"><img src="' + escapeHtml(exercise.image) + '" alt="' + escapeHtml(exercise.equipment) + '" loading="lazy" width="640" height="640"><span>Фото оборудования · увеличить</span></button>' : '';
     return '<article class="exercise-card ' + (done ? 'is-done' : '') + '">' + image +
       '<div class="exercise-content"><div class="exercise-title-row"><div><span class="exercise-number">' + String(index + 1).padStart(2, '0') + '</span><h3 class="exercise-name">' + escapeHtml(exercise.name) + '</h3></div>' +
       '<button type="button" class="check ' + (done ? 'checked' : '') + '" data-key="' + key + '" aria-pressed="' + done + '" aria-label="Отметить ' + escapeHtml(exercise.name) + '">' + (done ? '✓' : '') + '</button></div>' +
       '<div class="exercise-plan-row"><p class="exercise-meta">' + exercise.sets + '</p>' + (strength ? '<span class="logged-sets">Записано: ' + logged + ' / ' + parseSetText(exercise.sets).sets + '</span>' : exercise.kind === 'cardio' ? '<span class="logged-sets">Записей: ' + logged + '</span>' : '') + '</div>' +
-      '<p class="exercise-note">' + escapeHtml(exercise.loadHint) + '</p><details><summary>Техника выполнения</summary><p>' + escapeHtml(exercise.note) + '</p></details>' +
-      (strength ? '<details class="set-entry"><summary>Записать подход</summary><form class="quick-set-form" data-index="' + index + '"><div class="tracker-inline"><label>Вес, кг<input name="weight" type="number" min="0" max="1000" step="0.1" inputmode="decimal" required value="' + (previous ? escapeHtml(previous.weight) : '') + '" placeholder="Вес"></label><label>Повторы<input name="reps" type="number" min="1" max="100" step="1" inputmode="numeric" required placeholder="' + parseSetText(exercise.sets).min + '"></label></div><button type="submit" class="save-button">Сохранить подход</button></form></details>' : exercise.kind === 'cardio' ? '<details class="set-entry"><summary>Записать кардио</summary><form class="quick-cardio-form" data-index="' + index + '"><div class="tracker-inline"><label>Время, мин<input name="minutes" type="number" min="1" max="300" step="1" required value="' + exercise.minutes + '"></label><label>Скорость, км/ч · необязательно<input name="speed" type="number" min="0" max="30" step="0.1" inputmode="decimal" placeholder="Например, 5"></label></div><label>Наклон, % · необязательно<input name="incline" type="number" min="0" max="30" step="0.5" inputmode="decimal" placeholder="Например, 2"></label><button class="save-button" type="submit">Сохранить кардио</button></form></details>' : '') + '</div></article>';
+      '<p class="exercise-note">' + escapeHtml(strength ? recommendationText(exercise) : exercise.loadHint) + '</p><details><summary>Техника выполнения</summary><p>' + escapeHtml(exercise.note) + '</p></details>' +
+      (strength ? '<details class="set-entry"><summary>Записать подход</summary><form class="quick-set-form" data-index="' + index + '"><div class="tracker-inline"><label>Вес, кг<input name="weight" type="number" min="0" max="1000" step="0.1" inputmode="decimal" required value="' + (previous ? escapeHtml(previous.weight) : '') + '" placeholder="Вес"></label><label>Повторы<input name="reps" type="number" min="1" max="100" step="1" inputmode="numeric" required placeholder="' + parseSetText(exercise.sets).min + '"></label></div><fieldset class="effort-choice"><legend>Как дался подход?</legend><label><input type="radio" name="effort" value="easy"><span>Легко</span></label><label><input type="radio" name="effort" value="normal" checked><span>Нормально</span></label><label><input type="radio" name="effort" value="hard"><span>Тяжело</span></label></fieldset><button type="submit" class="save-button">Сохранить подход</button></form></details>' : exercise.kind === 'cardio' ? '<details class="set-entry"><summary>Записать кардио</summary><form class="quick-cardio-form" data-index="' + index + '"><div class="tracker-inline"><label>Время, мин<input name="minutes" type="number" min="1" max="300" step="1" required value="' + exercise.minutes + '"></label><label>Скорость, км/ч · необязательно<input name="speed" type="number" min="0" max="30" step="0.1" inputmode="decimal" placeholder="Например, 5"></label></div><label>Наклон, % · необязательно<input name="incline" type="number" min="0" max="30" step="0.5" inputmode="decimal" placeholder="Например, 2"></label><button class="save-button" type="submit">Сохранить кардио</button></form></details>' : '') + '</div></article>';
   }).join('');
 
   document.querySelector('#todayLabel').textContent = `ДЕНЬ ${selectedDay}`;
@@ -518,19 +536,21 @@ document.querySelector('#nextDay').addEventListener('click', () => {
   renderPlan();
 });
 
-function saveSet(exercise, weightValue, repsValue, index = null) {
+function saveSet(exercise, weightValue, repsValue, index = null, effort = 'normal') {
   if (needsOnboarding) { setActiveTab('profile'); return false; }
   const weight = Number(weightValue), reps = Number(repsValue);
   if (!exercise || String(weightValue).trim() === '' || !Number.isFinite(weight) || weight < 0 || weight > 1000 || !Number.isInteger(reps) || reps < 1 || reps > 100) {
     toast('Укажи вес от 0 до 1000 кг и 1–100 повторов'); return false;
   }
-  const row = { date: new Date().toLocaleDateString('ru-RU'), timestamp: new Date().toISOString(), program:storage.program, exercise, weight, reps };
+  const source = getCurrentWorkout().exercises.find(item => exerciseId(item.name) === exerciseId(exercise));
+  const safeEffort = ['easy','normal','hard'].includes(effort) ? effort : 'normal';
+  const row = { date: new Date().toLocaleDateString('ru-RU'), timestamp: new Date().toISOString(), program:storage.program, exercise, weight, reps, effort:safeEffort, nextWeight:source ? recommendNextWeight(source,weight,reps,safeEffort) : weight };
   if (index !== null) { row.day = selectedDay; row.exerciseKey = exerciseKey(index); }
   const updated = [...storage.tracker, row];
   try { localStorage.setItem(STORAGE_KEYS.tracker, JSON.stringify(updated)); }
   catch { toast('Не удалось сохранить подход'); return false; }
   storage.tracker = updated;
-  renderTracker(); renderPlan(); toast('Подход записан — он уже в журнале'); return true;
+  renderTracker(); renderPlan(); startRestTimer(); toast('Подход сохранён · отдых начался'); return true;
 }
 document.querySelector('#exerciseList').addEventListener('submit', event => {
   const form = event.target;
@@ -541,7 +561,7 @@ document.querySelector('#exerciseList').addEventListener('submit', event => {
   const exercise = getCurrentWorkout().exercises[index];
   if (!exercise || !exercise.sets.includes('×')) return;
   const data = new FormData(form);
-  saveSet(exercise.name, data.get('weight'), data.get('reps'), index);
+  saveSet(exercise.name, data.get('weight'), data.get('reps'), index, data.get('effort')); 
 });
 const photoDialog = document.querySelector('#equipmentDialog');
 document.querySelector('#exerciseList').addEventListener('click', event => {
@@ -570,8 +590,9 @@ function toast(message) { const el = document.querySelector('#toast'); el.textCo
 document.querySelector('#openProfile').addEventListener('click', () => setActiveTab('profile'));
 function currentRestSeconds() { return storage.profile.goal === 'strength' ? 120 : 90; }
 let timerEnd = 0, timerInterval;
-function renderTimer() { const seconds = timerEnd ? Math.max(0, Math.ceil((timerEnd - Date.now()) / 1000)) : currentRestSeconds(); document.querySelector('#timerValue').textContent = String(Math.floor(seconds / 60)).padStart(2,'0') + ':' + String(seconds % 60).padStart(2,'0'); if (timerEnd && seconds === 0) { clearInterval(timerInterval); timerEnd = 0; document.querySelector('#timerStart').textContent = 'Ещё раз'; toast('Отдых завершён — следующий подход'); } }
-document.querySelector('#timerStart').addEventListener('click', () => { clearInterval(timerInterval); timerEnd = Date.now() + currentRestSeconds() * 1000; renderTimer(); timerInterval = setInterval(renderTimer, 250); document.querySelector('#timerStart').textContent = 'Начать заново'; });
+function renderTimer() { const seconds = timerEnd ? Math.max(0, Math.ceil((timerEnd - Date.now()) / 1000)) : currentRestSeconds(); document.querySelector('#timerValue').textContent = String(Math.floor(seconds / 60)).padStart(2,'0') + ':' + String(seconds % 60).padStart(2,'0'); const sessionRest = document.querySelector('#sessionRest'); if (sessionRest) sessionRest.textContent = timerEnd ? 'Отдых ' + String(Math.floor(seconds / 60)).padStart(2,'0') + ':' + String(seconds % 60).padStart(2,'0') : 'Готов к подходу'; if (timerEnd && seconds === 0) { clearInterval(timerInterval); timerEnd = 0; document.querySelector('#timerStart').textContent = 'Ещё раз'; toast('Отдых завершён — следующий подход'); } }
+function startRestTimer() { clearInterval(timerInterval); timerEnd = Date.now() + currentRestSeconds() * 1000; renderTimer(); timerInterval = setInterval(renderTimer, 250); document.querySelector('#timerStart').textContent = 'Начать заново'; }
+document.querySelector('#timerStart').addEventListener('click', startRestTimer);
 document.querySelector('#timerReset').addEventListener('click', () => { clearInterval(timerInterval); timerEnd = 0; renderTimer(); document.querySelector('#timerStart').textContent = 'Начать отдых'; });
 
 function markProfileChanged() {
@@ -652,4 +673,23 @@ document.querySelector('#planBodyWeightForm').addEventListener('submit', event =
 });
 document.querySelector('#editTrainingGoal').addEventListener('click', () => setActiveTab('profile'));
 
+const workoutDialog = document.querySelector('#workoutDialog');
+let sessionClock;
+function saveActiveWorkout() { try { localStorage.setItem(STORAGE_KEYS.activeWorkout,JSON.stringify(storage.activeWorkout)); } catch {} }
+function openWorkout() {
+ if (needsOnboarding) { setActiveTab('profile'); return; }
+ const exercises=getAdjustedPlan(getCurrentWorkout()); if (!exercises.length) { toast('Сегодня день восстановления'); return; }
+ const current=storage.activeWorkout;
+ if (!current || current.day!==selectedDay || current.program!==storage.program) storage.activeWorkout={day:selectedDay,program:storage.program,index:0,startedAt:Date.now()};
+ saveActiveWorkout(); renderWorkoutMode();
+ if (typeof workoutDialog.showModal==='function') workoutDialog.showModal(); else workoutDialog.setAttribute('open','');
+ clearInterval(sessionClock);sessionClock=setInterval(renderSessionElapsed,1000);renderSessionElapsed();
+}
+function closeWorkout() { clearInterval(sessionClock); if(typeof workoutDialog.close==='function')workoutDialog.close();else workoutDialog.removeAttribute('open'); }
+function sessionExercises(){return getAdjustedPlan(getCurrentWorkout());}
+function renderSessionElapsed(){const el=document.querySelector('#sessionElapsed');if(!el||!storage.activeWorkout)return;const sec=Math.max(0,Math.floor((Date.now()-storage.activeWorkout.startedAt)/1000));el.textContent=String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');}
+function finishWorkout(){const elapsed=Math.max(1,Math.round((Date.now()-storage.activeWorkout.startedAt)/60000));const rows=storage.tracker.filter(r=>r.day===selectedDay&&r.program===storage.program);if(!currentProgress().includes(selectedDay)){currentProgress().push(selectedDay);saveCurrentProgress();}storage.activeWorkout=null;localStorage.removeItem(STORAGE_KEYS.activeWorkout);renderDays();renderProgress();renderTracker();document.querySelector('#sessionContent').innerHTML='<section class="session-finish"><span>✓</span><p class="eyebrow">ТРЕНИРОВКА ЗАВЕРШЕНА</p><h2>Отличная работа</h2><div><strong>'+elapsed+' мин</strong><small>время</small></div><div><strong>'+rows.length+'</strong><small>подходов и записей</small></div><button class="save-button" type="button" id="finishClose">Готово</button></section>';document.querySelector('#sessionStep').textContent='ИТОГ';document.querySelector('#sessionProgressBar').style.width='100%';document.querySelector('.session-footer').hidden=true;document.querySelector('#finishClose').addEventListener('click',closeWorkout);}
+function renderWorkoutMode(){const list=sessionExercises(), state=storage.activeWorkout;if(!state)return;if(state.index>=list.length){finishWorkout();return;}const ex=list[state.index],cardio=ex.kind==='cardio',prev=previousSetFor(ex.name),key=exerciseKey(state.index),logged=storage.tracker.filter(r=>r.exerciseKey===key).length,target=cardio?1:parseSetText(ex.sets).sets;document.querySelector('.session-footer').hidden=false;document.querySelector('#sessionStep').textContent='УПРАЖНЕНИЕ '+(state.index+1)+' ИЗ '+list.length;document.querySelector('#sessionProgressBar').style.width=((state.index+logged/Math.max(1,target))/list.length*100)+'%';document.querySelector('#sessionPrev').disabled=state.index===0;document.querySelector('#sessionNext').textContent=state.index===list.length-1?'Завершить':'Следующее';const photo=ex.image?'<img class="session-photo" src="'+escapeHtml(ex.image)+'" alt="'+escapeHtml(ex.equipment||ex.name)+'">':'';const entry=cardio?'<form id="sessionEntry"><div class="session-fields"><label>Время, мин<input name="minutes" type="number" min="1" max="300" required value="'+ex.minutes+'"></label></div><button class="save-button" type="submit">Сохранить кардио</button></form>':'<form id="sessionEntry"><p class="session-set-count">Подход '+Math.min(logged+1,target)+' из '+target+'</p><div class="session-fields"><label>Вес, кг<input name="weight" type="number" min="0" max="1000" step="0.1" inputmode="decimal" required value="'+escapeHtml(prev?.nextWeight??prev?.weight??'')+'" placeholder="0"></label><label>Повторы<input name="reps" type="number" min="1" max="100" required value="'+parseSetText(ex.sets).min+'"></label></div><fieldset class="effort-choice"><legend>Как дался подход?</legend><label><input type="radio" name="effort" value="easy"><span>Легко</span></label><label><input type="radio" name="effort" value="normal" checked><span>Нормально</span></label><label><input type="radio" name="effort" value="hard"><span>Тяжело</span></label></fieldset><button class="save-button" type="submit">Подход выполнен</button></form>';document.querySelector('#sessionContent').innerHTML=photo+'<div class="session-exercise"><div class="session-rest" id="sessionRest">'+(timerEnd?'Идёт отдых':'Готов к подходу')+'</div><h2 id="sessionExerciseName">'+escapeHtml(ex.name)+'</h2><p class="session-prescription">'+escapeHtml(ex.sets)+'</p><p class="session-recommendation">'+escapeHtml(cardio?ex.loadHint:recommendationText(ex))+'</p><details><summary>Техника выполнения</summary><p>'+escapeHtml(ex.note)+'</p></details>'+entry+'</div>';document.querySelector('#sessionEntry').addEventListener('submit',e=>{e.preventDefault();const d=new FormData(e.target);if(cardio){if(saveCardio(ex.name,d.get('minutes'),'','',state.index)){state.index++;saveActiveWorkout();renderWorkoutMode();}}else if(saveSet(ex.name,d.get('weight'),d.get('reps'),state.index,d.get('effort'))){const count=storage.tracker.filter(r=>r.exerciseKey===key).length;if(count>=target)state.index++;saveActiveWorkout();renderWorkoutMode();}});renderTimer();}
+document.querySelector('#startWorkout').addEventListener('click',openWorkout);document.querySelector('#closeWorkout').addEventListener('click',closeWorkout);document.querySelector('#sessionPrev').addEventListener('click',()=>{if(storage.activeWorkout){storage.activeWorkout.index=Math.max(0,storage.activeWorkout.index-1);saveActiveWorkout();renderWorkoutMode();}});document.querySelector('#sessionNext').addEventListener('click',()=>{if(!storage.activeWorkout)return;storage.activeWorkout.index++;saveActiveWorkout();renderWorkoutMode();});workoutDialog.addEventListener('cancel',()=>clearInterval(sessionClock));
+if ('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 renderTimer();

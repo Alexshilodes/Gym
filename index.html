@@ -4,11 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#eff5ee" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Форма" />
+  <link rel="manifest" href="manifest.webmanifest?v=20260919-1" />
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
   <title>Форма — тренировки</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260918-3" />
+  <link rel="stylesheet" href="styles.css?v=20260919-1" />
 </head>
 <body class="is-onboarding">
   <main class="app-shell">
@@ -62,7 +68,7 @@
         <span class="count" id="exerciseCount">6 упражнений</span>
       </section>
 
-      <p class="logging-help">Галочка — упражнение выполнено. «Записать подход» — сохранить вес и повторы в журнал. Запись необязательна.</p><p class="equipment-help">На фото — пример нужного оборудования. Модель в твоём зале может отличаться.</p><section class="rest-timer"><div><p class="eyebrow">МЕЖДУ ПОДХОДАМИ</p><strong id="timerValue">01:30</strong></div><button id="timerStart">Начать отдых</button><button id="timerReset" aria-label="Сбросить таймер">Сброс</button></section><section class="exercise-list" id="exerciseList"></section>
+      <p class="logging-help">Галочка — упражнение выполнено. «Записать подход» — сохранить вес и повторы в журнал. Запись необязательна.</p><p class="equipment-help">На фото — пример нужного оборудования. Модель в твоём зале может отличаться.</p><section class="rest-timer"><div><p class="eyebrow">МЕЖДУ ПОДХОДАМИ</p><strong id="timerValue">01:30</strong></div><button id="timerStart">Начать отдых</button><button id="timerReset" aria-label="Сбросить таймер">Сброс</button></section><button id="startWorkout" class="start-workout" type="button"><span>▶</span><span><strong>Начать тренировку</strong><small>Упражнения по очереди · таймер включится сам</small></span></button><section class="exercise-list" id="exerciseList"></section>
 
 <section class="post-workout-card weight-prompt" id="postWorkoutCard"><div><p class="eyebrow">ПОСЛЕ ТРЕНИРОВКИ</p><h2>Ещё один маленький шаг</h2><p class="page-copy">Сохрани вес тела, чтобы видеть свою динамику.</p><p id="planWeightStatus" class="weight-status" role="status"></p></div><button class="save-button" type="button" data-open-weight>＋ Записать вес</button></section>
       <section class="tip-card">
@@ -143,7 +149,7 @@
     <button class="nav-item" data-target="profile"><span>◎</span>Профиль</button>
   </nav>
 
-  <dialog id="weightDialog" class="weight-dialog" aria-labelledby="weightDialogTitle"><button type="button" class="weight-close" id="closeWeightDialog" aria-label="Закрыть">×</button><p class="eyebrow">ТВОЙ ПРОГРЕСС</p><h2 id="weightDialogTitle">Записать вес</h2><p class="page-copy">Один замер — часть общей картины.</p><form id="planBodyWeightForm"><label class="weight-input-label" for="bodyWeightInput">Вес тела</label><div class="weight-input-wrap"><input id="bodyWeightInput" name="bodyWeight" type="text" inputmode="decimal" required autocomplete="off" placeholder="72,5" maxlength="6"><span>кг</span></div><fieldset class="weight-context"><legend>Когда взвесился?</legend><label><input type="radio" name="context" value="after" checked><span>После занятия</span></label><label><input type="radio" name="context" value="morning"><span>Утром</span></label><label><input type="radio" name="context" value="other"><span>Другое</span></label></fieldset><p class="profile-help">Сравнивай замеры в одинаковых условиях.</p><button class="save-button" type="submit">Сохранить замер</button></form></dialog><dialog id="equipmentDialog" class="equipment-dialog" aria-labelledby="equipmentDialogTitle"><button id="closeEquipmentDialog" type="button">Закрыть</button><h2 id="equipmentDialogTitle">Фото оборудования</h2><img id="equipmentDialogImage" alt=""><p>Пример оборудования. Модель в твоём зале может отличаться.</p></dialog>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div><script src="app.js?v=20260918-3"></script>
+  <dialog id="workoutDialog" class="workout-dialog" aria-labelledby="sessionExerciseName"><div class="session-shell"><header class="session-header"><button id="closeWorkout" class="session-close" type="button" aria-label="Закрыть тренировку">×</button><div><p id="sessionStep" class="eyebrow">ТРЕНИРОВКА</p><div class="session-progress"><i id="sessionProgressBar"></i></div></div><time id="sessionElapsed">00:00</time></header><main id="sessionContent"></main><footer class="session-footer"><button id="sessionPrev" type="button">Назад</button><button id="sessionNext" type="button">Следующее</button></footer></div></dialog><dialog id="weightDialog" class="weight-dialog" aria-labelledby="weightDialogTitle"><button type="button" class="weight-close" id="closeWeightDialog" aria-label="Закрыть">×</button><p class="eyebrow">ТВОЙ ПРОГРЕСС</p><h2 id="weightDialogTitle">Записать вес</h2><p class="page-copy">Один замер — часть общей картины.</p><form id="planBodyWeightForm"><label class="weight-input-label" for="bodyWeightInput">Вес тела</label><div class="weight-input-wrap"><input id="bodyWeightInput" name="bodyWeight" type="text" inputmode="decimal" required autocomplete="off" placeholder="72,5" maxlength="6"><span>кг</span></div><fieldset class="weight-context"><legend>Когда взвесился?</legend><label><input type="radio" name="context" value="after" checked><span>После занятия</span></label><label><input type="radio" name="context" value="morning"><span>Утром</span></label><label><input type="radio" name="context" value="other"><span>Другое</span></label></fieldset><p class="profile-help">Сравнивай замеры в одинаковых условиях.</p><button class="save-button" type="submit">Сохранить замер</button></form></dialog><dialog id="equipmentDialog" class="equipment-dialog" aria-labelledby="equipmentDialogTitle"><button id="closeEquipmentDialog" type="button">Закрыть</button><h2 id="equipmentDialogTitle">Фото оборудования</h2><img id="equipmentDialogImage" alt=""><p>Пример оборудования. Модель в твоём зале может отличаться.</p></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div><script src="app.js?v=20260919-1"></script>
 </body>
 </html>
